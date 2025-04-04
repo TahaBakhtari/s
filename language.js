@@ -10,7 +10,7 @@ const languages = {
         nav_language: "فارسی", // Switch to Persian
         
         // Hero section
-        hero_title: "Taha Asl Bakhtari",
+        hero_title: "Taha Bakhtari",
         hero_subtitle: "AI Specialist & Researcher",
         hero_description: "Programmer, researcher, and content creator specializing in Artificial Intelligence",
         hero_btn_projects: "View Projects",
