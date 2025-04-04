@@ -1,0 +1,262 @@
+/* Animation Keyframes */
+@keyframes textGlow {
+    0% {
+        text-shadow: 0 0 10px rgba(139, 92, 246, 0.4);
+    }
+    100% {
+        text-shadow: 0 0 25px rgba(139, 92, 246, 0.8), 0 0 5px rgba(244, 114, 182, 0.5);
+    }
+}
+
+@keyframes glowPulse {
+    0% {
+        box-shadow: 0 0 5px rgba(244, 114, 182, 0.5);
+    }
+    100% {
+        box-shadow: 0 0 20px rgba(244, 114, 182, 0.9);
+    }
+}
+
+@keyframes widthPulse {
+    0% {
+        width: 30%;
+    }
+    100% {
+        width: 100%;
+    }
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-15px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+@keyframes pulseSlow {
+    0% {
+        transform: scale(1);
+        opacity: 0.7;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 0.9;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 0.7;
+    }
+}
+
+@keyframes rotateSlow {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Glitch Effect */
+@keyframes glitch {
+    0% {
+        transform: translate(0);
+    }
+    20% {
+        transform: translate(-2px, 2px);
+    }
+    40% {
+        transform: translate(-2px, -2px);
+    }
+    60% {
+        transform: translate(2px, 2px);
+    }
+    80% {
+        transform: translate(2px, -2px);
+    }
+    100% {
+        transform: translate(0);
+    }
+}
+
+/* Particle Canvas Styles */
+.particle-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* Animation Classes */
+.animate-in {
+    animation: fadeIn 0.8s ease-out forwards;
+}
+
+.neon-text {
+    animation: textGlow 3s infinite alternate;
+}
+
+.glitch {
+    animation: glitch 0.3s infinite;
+}
+
+.with-cursor::after {
+    content: '|';
+    animation: pulse 1s infinite;
+    margin-left: 2px;
+    opacity: 0.7;
+}
+
+/* Media Queries */
+@media screen and (max-width: 1024px) {
+    .hero-text h1 {
+        font-size: clamp(2.5rem, 8vw, 3rem);
+        line-height: 1.2;
+    }
+    
+    .hero-text p {
+        font-size: 1.1rem;
+        max-width: 90%;
+        margin: 1.5rem auto;
+    }
+    
+    .hero-content {
+        flex-direction: column-reverse;
+        text-align: center;
+    }
+    
+    .hero-text h1 {
+        font-size: 3rem;
+    }
+    
+    .hero-text h1::before,
+    .hero-text h1::after {
+        display: none;
+    }
+    
+    .hero-text p {
+        padding-left: 0;
+        border-left: none;
+    }
+    
+    .hero-buttons {
+        justify-content: center;
+    }
+    
+    .hero-image img {
+        max-width: 300px;
+        margin-bottom: 30px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .nav-links {
+        position: absolute;
+        right: 0;
+        top: 70px;
+        background-color: rgba(10, 10, 22, 0.95);
+        backdrop-filter: blur(10px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        transform: translateY(-150%);
+        transition: transform 0.5s ease-in;
+        padding: 20px 0;
+        border-bottom: 1px solid rgba(139, 92, 246, 0.3);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+    
+    .nav-links.active {
+        transform: translateY(0%);
+    }
+    
+    .burger {
+        display: block;
+    }
+    
+    .burger.active .line1 {
+        transform: rotate(-45deg) translate(-5px, 6px);
+        background-color: var(--primary-color);
+    }
+    
+    .burger.active .line2 {
+        opacity: 0;
+    }
+    
+    .burger.active .line3 {
+        transform: rotate(45deg) translate(-5px, -6px);
+        background-color: var(--primary-color);
+    }
+    
+    .section-title {
+        font-size: 2rem;
+    }
+    
+    .hero-text h1 {
+        font-size: 2.5rem;
+    }
+    
+    .hero-text h2 {
+        font-size: 1.5rem;
+    }
+    
+    .project-categories,
+    .content-platforms {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .hero-text h1 {
+        font-size: clamp(1.75rem, 6.5vw, 2rem);
+    }
+    
+    .hero-buttons .btn {
+        width: 100%;
+        padding: 12px;
+        font-size: 0.9rem;
+    }
+    
+    .hero-image img {
+        max-width: 95%;
+        margin-bottom: 1.5rem;
+    }
+    
+    .skill-card,
+    .project-category,
+    .platform-card {
+        padding: 20px;
+    }
+}
