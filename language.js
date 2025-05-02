@@ -20,7 +20,7 @@ const languages = {
         about_title: "About Me",
         about_text: "Born May 9, 2009, in Tehran, I am a programmer, researcher, and content creator specializing in Artificial Intelligence (AI). I work on cutting-edge topics like Large Language Models (LLMs), Generative AI, Computer Vision, Agentic AI, and Multi-Agent Systems, and have developed several creative and experimental projects in these areas.",
         about_education_title: "Life & Education",
-        about_education_text: "I was born in Tehran and developed a passion for programming and technology from an early age. A fully self-taught learner, I have grown into one of the most promising young AI specialists in Iran.",
+        about_education_text: "I was born in Tehran and developed a passion for programming and technology from an early age. A fully self-taught learner.",
         
         // Projects section
         projects_title: "Professional Activities",
@@ -89,7 +89,7 @@ const languages = {
         about_title: "درباره من",
         about_text: "متولد ۱۹ اردیبهشت ۱۳۸۸ در تهران، من یک برنامه‌نویس، پژوهشگر و تولیدکننده محتوا در زمینه هوش مصنوعی هستم. من روی موضوعات پیشرفته مانند مدل‌های زبانی بزرگ (LLM)، هوش مصنوعی مولد، بینایی کامپیوتر، هوش مصنوعی عاملی و سیستم‌های چند عاملی کار می‌کنم و چندین پروژه خلاقانه و آزمایشی در این زمینه‌ها توسعه داده‌ام.",
         about_education_title: "زندگی و تحصیلات",
-        about_education_text: "من در تهران متولد شدم و از سنین پایین علاقه زیادی به برنامه‌نویسی و فناوری پیدا کردم. به عنوان یک یادگیرنده کاملاً خودآموخته، به یکی از امیدوارکننده‌ترین متخصصان جوان هوش مصنوعی در ایران تبدیل شده‌ام.",
+        about_education_text: "من در تهران متولد شدم و از سنین پایین علاقه زیادی به برنامه‌نویسی و فناوری پیدا کردم. به عنوان یک یادگیرنده کاملاً خودآموخته",
         
         // Projects section
         projects_title: "فعالیت‌های حرفه‌ای",
