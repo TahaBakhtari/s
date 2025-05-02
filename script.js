@@ -111,7 +111,7 @@ window.addEventListener('resize', () => {
 
 // Scroll animations using Intersection Observer
 const animateOnScroll = () => {
-    const elements = document.querySelectorAll('.skill-card, .project-category, .platform-card, .section-title, .hero-text, .hero-image');
+    const elements = document.querySelectorAll('.skill-card, .project-category, .platform-card, .section-title, .hero-text, .hero-image, .agent-card, .gallery-item, .about-highlights, .highlight-item');
     
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -224,6 +224,82 @@ const mobileNavToggle = () => {
     });
 };
 
+// Project Gallery Filtering
+const initProjectFilters = () => {
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const galleryItems = document.querySelectorAll('.gallery-item');
+    
+    filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // Remove active class from all buttons
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            
+            // Add active class to clicked button
+            button.classList.add('active');
+            
+            // Get filter value
+            const filterValue = button.getAttribute('data-filter');
+            
+            // Filter gallery items
+            galleryItems.forEach(item => {
+                if (filterValue === 'all' || item.classList.contains(filterValue)) {
+                    item.style.display = 'block';
+                    setTimeout(() => {
+                        item.style.opacity = '1';
+                        item.style.transform = 'translateY(0)';
+                    }, 100);
+                } else {
+                    item.style.opacity = '0';
+                    item.style.transform = 'translateY(20px)';
+                    setTimeout(() => {
+                        item.style.display = 'none';
+                    }, 300);
+                }
+            });
+        });
+    });
+};
+
+// Counter animation for highlight numbers
+const animateCounters = () => {
+    const counterElements = document.querySelectorAll('.highlight-number');
+    
+    counterElements.forEach(counter => {
+        const target = parseInt(counter.textContent);
+        const duration = 2000; // 2 seconds
+        const step = target / duration * 10;
+        let current = 0;
+        
+        const updateCounter = () => {
+            current += step;
+            if (current < target) {
+                counter.textContent = Math.floor(current);
+                setTimeout(updateCounter, 10);
+            } else {
+                counter.textContent = target;
+                if (!counter.textContent.includes('+') && counter.nextElementSibling.textContent.includes('Years')) {
+                    counter.textContent += '+';
+                }
+                if (!counter.textContent.includes('+') && counter.nextElementSibling.textContent.includes('Projects')) {
+                    counter.textContent += '+';
+                }
+            }
+        };
+        
+        // Start counter animation when element is in view
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    setTimeout(updateCounter, 300);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+        
+        observer.observe(counter);
+    });
+};
+
 // Initialize all animations when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     animateOnScroll();
@@ -233,4 +309,125 @@ document.addEventListener('DOMContentLoaded', () => {
     addTypingAnimation();
     smoothScrolling();
     mobileNavToggle();
+    initProjectFilters();
+    animateCounters();
+});
+
+// Chatbot Functionality
+document.addEventListener('DOMContentLoaded', () => {
+    const toggleChatbotBtn = document.getElementById('toggle-chatbot-btn');
+    const closeChatbotBtn = document.getElementById('close-chatbot-btn');
+    const chatbotContainer = document.getElementById('chatbot-container');
+    const chatbotMessages = document.getElementById('chatbot-messages');
+    const chatbotInput = document.getElementById('chatbot-input');
+    const chatbotSendBtn = document.getElementById('chatbot-send-btn');
+
+    // --- Configuration ---
+    const apiKey = "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"; // WARNING: Insecure to keep API key here!
+    const apiUrl = "https://openrouter.ai/api/v1/chat/completions";
+    const model = "openai/gpt-4o-mini";
+    const systemPrompt = {
+        role: "system",
+        content: "You are Taha Bakhtari's (طاها باختری) AI assistant on his personal website. Answer questions about Taha, his projects (like FarsiRAG, Subtitle Generator, CAPTCHA Solver, etc.), his skills (AI, CV, NLP, LLMs), and his content (YouTube, Telegram). Be helpful, concise, and friendly. You can answer in Persian or English based on the user's language. If asked about Taha's age, mention he was born May 9, 2009. Refer to the website content for information."
+        // content: "تو دستیار هوش مصنوعی طاها بختیاری در وب‌سایت شخصی او هستی. به سوالات درباره طاها، پروژه‌هایش (مانند FarsiRAG، Subtitle Generator، CAPTCHA Solver و غیره)، مهارت‌هایش (هوش مصنوعی، بینایی کامپیوتر، پردازش زبان طبیعی، مدل‌های زبانی بزرگ) و محتوایش (یوتیوب، تلگرام) پاسخ بده. مفید، مختصر و دوستانه باش. می‌توانی بر اساس زبان کاربر به فارسی یا انگلیسی پاسخ دهی. اگر سن طاها پرسیده شد، بگو متولد ۹ اردیبهشت ۱۳۸۸ (May 9, 2009) است. برای اطلاعات به محتوای وب‌سایت مراجعه کن."
+    };
+    let conversationHistory = [systemPrompt];
+    // --- End Configuration ---
+
+    const toggleChatbot = () => {
+        chatbotContainer.classList.toggle('hidden');
+        if (!chatbotContainer.classList.contains('hidden')) {
+            chatbotInput.focus();
+        }
+    };
+
+    const addMessageToChat = (sender, message) => {
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('chatbot-message', sender === 'user' ? 'user-message' : 'bot-message');
+        messageElement.textContent = message;
+        chatbotMessages.appendChild(messageElement);
+        // Scroll to the bottom
+        chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+    };
+
+    const sendMessage = async () => {
+        const userInput = chatbotInput.value.trim();
+        if (!userInput) return; // Don't send empty messages
+
+        addMessageToChat('user', userInput);
+        conversationHistory.push({ role: "user", content: userInput });
+        chatbotInput.value = '';
+        chatbotInput.disabled = true;
+        chatbotSendBtn.disabled = true;
+
+        // Add typing indicator (optional)
+        addMessageToChat('bot', '...');
+        const typingIndicator = chatbotMessages.lastChild;
+
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${apiKey}`,
+                    'Content-Type': 'application/json',
+                    'HTTP-Referer': 'https://tahabakhtari.site',
+                    'X-Title': 'Taha Bakhtari Site'
+                },
+                body: JSON.stringify({
+                    model: model,
+                    messages: conversationHistory
+                })
+            });
+
+            // Remove typing indicator
+            chatbotMessages.removeChild(typingIndicator);
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({ error: { message: 'Failed to parse error response.' } }));
+                console.error('API Error Response:', errorData);
+                throw new Error(`API Error: ${response.status} ${response.statusText}. ${errorData?.error?.message || ''}`);
+            }
+
+            const result = await response.json();
+
+            if (result.choices && result.choices.length > 0 && result.choices[0].message) {
+                const botReply = result.choices[0].message.content;
+                addMessageToChat('bot', botReply);
+                conversationHistory.push({ role: "assistant", content: botReply });
+            } else {
+                console.error('Invalid response structure:', result);
+                addMessageToChat('bot', 'Sorry, I received an unexpected response. Please try again.');
+            }
+
+        } catch (error) {
+            console.error('Error fetching chatbot response:', error);
+            // Remove typing indicator if it's still there on error
+            if (chatbotMessages.contains(typingIndicator)) {
+                 chatbotMessages.removeChild(typingIndicator);
+            }
+            addMessageToChat('bot', `Sorry, something went wrong. ${error.message}`);
+        } finally {
+            chatbotInput.disabled = false;
+            chatbotSendBtn.disabled = false;
+            chatbotInput.focus();
+        }
+    };
+
+    // Event Listeners
+    if (toggleChatbotBtn) {
+        toggleChatbotBtn.addEventListener('click', toggleChatbot);
+    }
+    if (closeChatbotBtn) {
+        closeChatbotBtn.addEventListener('click', () => chatbotContainer.classList.add('hidden'));
+    }
+    if (chatbotSendBtn) {
+        chatbotSendBtn.addEventListener('click', sendMessage);
+    }
+    if (chatbotInput) {
+        chatbotInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    }
 });
