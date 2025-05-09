@@ -323,7 +323,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatbotSendBtn = document.getElementById('chatbot-send-btn');
 
     // --- Configuration ---
-    const apiKey = "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"; // WARNING: Insecure to keep API key here!
+    const apiKey = "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"; // WARNING: Insecure to keep API key here!
     const apiUrl = "https://openrouter.ai/api/v1/chat/completions";
     const model = "openai/gpt-4o-mini";
     const systemPrompt = {
