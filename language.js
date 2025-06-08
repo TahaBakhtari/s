@@ -12,6 +12,7 @@ const languages = {
         
         // Hero section
         hero_title: "Taha Bakhtari",
+        hero_subtitle: "AI Specialist & Researcher",
         hero_description: "Specializing in AI Agents, Large Language Models, and Computer Vision",
         hero_btn_agents: "Explore AI Agents",
         hero_btn_gallery: "View Projects",
