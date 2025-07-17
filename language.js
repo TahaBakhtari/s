@@ -390,7 +390,12 @@ const languages = {
         cert4_title: "حل مسئله (متوسط)",
         cert4_issuer: "از: HackerRank",
         cert4_desc: "حل مسئله (متوسط)",
-        cert4_id_label: "شناسه: 738EB5A5C8DE"
+        cert4_id_label: "شناسه: 738EB5A5C8DE",
+        "cert5_title": "علم داده با پایتون",
+        "cert5_issuer": "از: educba",
+        "cert5_desc": "",
+        "cert5_id_label": "شناسه: 69OFO1FSU"
+        
     }
 };
 
