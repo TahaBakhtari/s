@@ -69,8 +69,71 @@ class ArticleManager {
         // Update page title
         document.title = article.title + ' - طاها باختری';
         
+        // Update meta tags for social media previews
+        this.updateMetaTags(article, slug);
+        
         // Display article content
         this.displayArticle(article);
+    }
+
+    // Update meta tags for social media previews
+    updateMetaTags(article, slug) {
+        // Generate article URL
+        const articleURL = `${window.location.protocol}//${window.location.host}/${this.generateArticleURL(slug)}`;
+        
+        // Generate description from content (first 160 characters, remove HTML)
+        let description = article.content.replace(/<[^>]*>/g, '').substring(0, 160);
+        if (description.length === 160) {
+            description += '...';
+        }
+        
+        // Determine the best image to use for social media preview
+        let socialImage = 'https://tahabakhtari.com/me.jpg'; // Default image
+        if (article.socialImage) {
+            socialImage = article.socialImage;
+        } else if (article.featuredImage) {
+            socialImage = article.featuredImage;
+        }
+        
+        // Update Open Graph meta tags
+        this.updateMetaTag('og-title', 'content', article.title + ' - طاها باختری');
+        this.updateMetaTag('og-description', 'content', description);
+        this.updateMetaTag('og-url', 'content', articleURL);
+        this.updateMetaTag('og-image', 'content', socialImage);
+        this.updateMetaTag('og-image-alt', 'content', article.title);
+        this.updateMetaTag('og-author', 'content', article.author || 'Taha Bakhtari');
+        this.updateMetaTag('og-published-time', 'content', article.publishDate || article.date);
+        this.updateMetaTag('og-modified-time', 'content', article.lastModified || article.publishDate || article.date);
+        this.updateMetaTag('og-tags', 'content', article.tags ? article.tags.join(', ') : '');
+        
+        // Update Twitter Card meta tags
+        this.updateMetaTag('twitter-title', 'content', article.title + ' - طاها باختری');
+        this.updateMetaTag('twitter-description', 'content', description);
+        this.updateMetaTag('twitter-image', 'content', socialImage);
+        this.updateMetaTag('twitter-image-alt', 'content', article.title);
+        
+        // Update additional meta tags
+        this.updateMetaTag('meta-description', 'content', description);
+        this.updateMetaTag('meta-keywords', 'content', article.tags ? article.tags.join(', ') + ', هوش مصنوعی, طاها باختری' : 'هوش مصنوعی, طاها باختری');
+        
+        // Update canonical URL
+        this.updateLinkTag('canonical-url', 'href', articleURL);
+    }
+    
+    // Helper method to update meta tag content
+    updateMetaTag(id, attribute, value) {
+        const element = document.getElementById(id);
+        if (element) {
+            element.setAttribute(attribute, value);
+        }
+    }
+    
+    // Helper method to update link tag href
+    updateLinkTag(id, attribute, value) {
+        const element = document.getElementById(id);
+        if (element) {
+            element.setAttribute(attribute, value);
+        }
     }
 
     // Display article content

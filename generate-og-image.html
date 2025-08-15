@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open Graph Image Generator - طاها باختری</title>
+    <link rel="stylesheet" href="digi-rastin-font.css">
+    <style>
+        body {
+            font-family: 'DigiRastinPlus', 'Tahoma', 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+            direction: rtl;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .generator-section {
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #34495e;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 5px;
+            font-size: 16px;
+            font-family: 'DigiRastinPlus', 'Tahoma', 'Arial', sans-serif;
+            direction: rtl;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-family: 'DigiRastinPlus', 'Tahoma', 'Arial', sans-serif;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #2980b9;
+        }
+
+        .preview-canvas {
+            border: 2px solid #e9ecef;
+            border-radius: 5px;
+            max-width: 100%;
+            display: block;
+            margin: 20px auto;
+            background: white;
+        }
+
+        .download-section {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .template-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .template-card {
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .template-card:hover,
+        .template-card.active {
+            border-color: #3498db;
+            background-color: #f8f9fa;
+        }
+
+        .template-preview {
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .color-inputs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .color-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .color-group input[type="color"] {
+            width: 50px;
+            height: 40px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .instructions {
+            background-color: #e8f5e8;
+            border: 1px solid #c3e6c3;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .instructions h3 {
+            margin-top: 0;
+            color: #27ae60;
+        }
+
+        .instructions ul {
+            margin: 0;
+            padding-right: 20px;
+        }
+
+        .instructions li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>تولید تصویر پیش‌نمایش شبکه‌های اجتماعی</h1>
+        
+        <div class="instructions">
+            <h3>راهنمای استفاده:</h3>
+            <ul>
+                <li>ابعاد استاندارد Open Graph: 1200×630 پیکسل</li>
+                <li>حداکثر اندازه فایل توصیه شده: 5 مگابایت</li>
+                <li>فرمت‌های پشتیبانی شده: JPG, PNG</li>
+                <li>متن باید خوانا و کنتراست مناسب داشته باشد</li>
+                <li>از فونت‌های فارسی برای متن‌های فارسی استفاده کنید</li>
+            </ul>
+        </div>
+
+        <div class="generator-section">
+            <h3>انتخاب قالب:</h3>
+            <div class="template-selector">
+                <div class="template-card active" data-template="gradient">
+                    <div class="template-preview">گرادیان</div>
+                    <div>قالب گرادیان ساده</div>
+                </div>
+                <div class="template-card" data-template="tech">
+                    <div class="template-preview" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">تکنولوژی</div>
+                    <div>قالب تکنولوژی</div>
+                </div>
+                <div class="template-card" data-template="minimal">
+                    <div class="template-preview" style="background: #2c3e50;">مینیمال</div>
+                    <div>قالب مینیمال</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="generator-section">
+            <div class="form-group">
+                <label for="article-title">عنوان مقاله:</label>
+                <input type="text" id="article-title" value="نمونه عنوان مقاله در زمینه هوش مصنوعی" placeholder="عنوان مقاله را وارد کنید">
+            </div>
+
+            <div class="form-group">
+                <label for="article-subtitle">زیرعنوان (اختیاری):</label>
+                <input type="text" id="article-subtitle" value="مقاله‌ای توسط طاها باختری" placeholder="زیرعنوان یا توضیح کوتاه">
+            </div>
+
+            <div class="form-group">
+                <label for="author-name">نام نویسنده:</label>
+                <input type="text" id="author-name" value="طاها باختری" placeholder="نام نویسنده">
+            </div>
+
+            <div class="color-inputs">
+                <div class="color-group">
+                    <label>رنگ پس‌زمینه اصلی:</label>
+                    <input type="color" id="bg-color-1" value="#667eea">
+                </div>
+                <div class="color-group">
+                    <label>رنگ پس‌زمینه ثانویه:</label>
+                    <input type="color" id="bg-color-2" value="#764ba2">
+                </div>
+                <div class="color-group">
+                    <label>رنگ متن:</label>
+                    <input type="color" id="text-color" value="#ffffff">
+                </div>
+                <div class="color-group">
+                    <label>رنگ متن ثانویه:</label>
+                    <input type="color" id="subtitle-color" value="#f0f0f0">
+                </div>
+            </div>
+
+            <button class="btn" onclick="generateImage()">تولید تصویر</button>
+        </div>
+
+        <div class="generator-section">
+            <canvas id="preview-canvas" class="preview-canvas" width="1200" height="630"></canvas>
+            
+            <div class="download-section">
+                <button class="btn" onclick="downloadImage()" id="download-btn" style="display: none;">دانلود تصویر</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentTemplate = 'gradient';
+        
+        // Template selection
+        document.querySelectorAll('.template-card').forEach(card => {
+            card.addEventListener('click', function() {
+                document.querySelectorAll('.template-card').forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+                currentTemplate = this.dataset.template;
+                generateImage();
+            });
+        });
+
+        // Auto-generate when inputs change
+        document.querySelectorAll('#article-title, #article-subtitle, #author-name, #bg-color-1, #bg-color-2, #text-color, #subtitle-color').forEach(input => {
+            input.addEventListener('input', generateImage);
+        });
+
+        function generateImage() {
+            const canvas = document.getElementById('preview-canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Get input values
+            const title = document.getElementById('article-title').value;
+            const subtitle = document.getElementById('article-subtitle').value;
+            const author = document.getElementById('author-name').value;
+            const bgColor1 = document.getElementById('bg-color-1').value;
+            const bgColor2 = document.getElementById('bg-color-2').value;
+            const textColor = document.getElementById('text-color').value;
+            const subtitleColor = document.getElementById('subtitle-color').value;
+
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Create gradient background
+            const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+            gradient.addColorStop(0, bgColor1);
+            gradient.addColorStop(1, bgColor2);
+            
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Add template-specific elements
+            if (currentTemplate === 'tech') {
+                // Add some tech elements
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+                ctx.lineWidth = 2;
+                for (let i = 0; i < 20; i++) {
+                    ctx.beginPath();
+                    ctx.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
+                    ctx.lineTo(Math.random() * canvas.width, Math.random() * canvas.height);
+                    ctx.stroke();
+                }
+            }
+
+            // Add overlay for better text readability
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Set text properties
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+
+            // Title
+            ctx.fillStyle = textColor;
+            ctx.font = 'bold 72px Arial, sans-serif';
+            
+            // Split title into multiple lines if too long
+            const titleLines = wrapText(ctx, title, canvas.width - 100);
+            const titleStartY = canvas.height / 2 - (titleLines.length * 40);
+            
+            titleLines.forEach((line, index) => {
+                ctx.fillText(line, canvas.width / 2, titleStartY + (index * 80));
+            });
+
+            // Subtitle
+            if (subtitle) {
+                ctx.fillStyle = subtitleColor;
+                ctx.font = '36px Arial, sans-serif';
+                ctx.fillText(subtitle, canvas.width / 2, canvas.height / 2 + 120);
+            }
+
+            // Author
+            ctx.fillStyle = subtitleColor;
+            ctx.font = '32px Arial, sans-serif';
+            ctx.fillText(author, canvas.width / 2, canvas.height - 80);
+
+            // Add logo/brand area
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+            ctx.fillRect(50, 50, 200, 80);
+            ctx.fillStyle = textColor;
+            ctx.font = '24px Arial, sans-serif';
+            ctx.textAlign = 'left';
+            ctx.fillText('TahaBakhtari.com', 60, 90);
+
+            // Show download button
+            document.getElementById('download-btn').style.display = 'inline-block';
+        }
+
+        function wrapText(ctx, text, maxWidth) {
+            const words = text.split(' ');
+            const lines = [];
+            let currentLine = words[0];
+
+            for (let i = 1; i < words.length; i++) {
+                const word = words[i];
+                const width = ctx.measureText(currentLine + ' ' + word).width;
+                if (width < maxWidth) {
+                    currentLine += ' ' + word;
+                } else {
+                    lines.push(currentLine);
+                    currentLine = word;
+                }
+            }
+            lines.push(currentLine);
+            return lines;
+        }
+
+        function downloadImage() {
+            const canvas = document.getElementById('preview-canvas');
+            const link = document.createElement('a');
+            const title = document.getElementById('article-title').value || 'article';
+            const fileName = `og-image-${title.replace(/[^a-zA-Z0-9\u0600-\u06FF]/g, '-')}.png`;
+            
+            link.download = fileName;
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+
+        // Generate initial image
+        generateImage();
+    </script>
+</body>
+</html>
