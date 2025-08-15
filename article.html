@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="article-title">مقاله - طاها باختری</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="digi-rastin-font.css">
+    <link rel="stylesheet" href="rtl.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Article-specific styles */
+        body {
+            background-color: white;
+            color: #333;
+            font-family: 'DigiRastinPlus', 'Tahoma', 'Arial', sans-serif;
+            direction: rtl;
+            text-align: right;
+        }
+
+        .article-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background-color: white;
+            min-height: 100vh;
+        }
+
+        .article-header {
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 30px;
+            margin-bottom: 40px;
+        }
+
+        .article-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            line-height: 1.3;
+            font-family: 'DigiRastinPlus', 'Tahoma', 'Arial', sans-serif;
+        }
+
+        .article-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+
+        .article-date {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .article-author {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #3498db;
+            text-decoration: none;
+            padding: 8px 16px;
+            border: 1px solid #3498db;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .back-home:hover {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .article-content {
+            font-family: 'DigiRastinPlus', 'Tahoma', 'Arial', sans-serif;
+            font-weight: 300;
+            line-height: 1.8;
+            font-size: 1.1rem;
+            direction: rtl;
+            text-align: right;
+        }
+
+        .article-content h1,
+        .article-content h2,
+        .article-content h3,
+        .article-content h4,
+        .article-content h5,
+        .article-content h6 {
+            color: #2c3e50;
+            margin: 30px 0 15px 0;
+            font-family: 'DigiRastinPlus', 'Tahoma', 'Arial', sans-serif;
+            font-weight: 400;
+        }
+
+        .article-content h1 {
+            font-size: 2.2rem;
+            font-weight: 500;
+        }
+
+        .article-content h2 {
+            font-size: 1.8rem;
+            border-right: 4px solid #3498db;
+            padding-right: 15px;
+            font-weight: 400;
+        }
+
+        .article-content h3 {
+            font-size: 1.4rem;
+            color: #34495e;
+            font-weight: 400;
+        }
+
+        .article-content p {
+            margin-bottom: 20px;
+            color: #444;
+            font-weight: 300;
+        }
+
+        .article-content strong,
+        .article-content b {
+            font-weight: 500;
+            color: #2c3e50;
+        }
+
+        .article-content em,
+        .article-content i {
+            font-style: italic;
+            font-weight: 300;
+        }
+
+        .article-content ul,
+        .article-content ol {
+            margin: 20px 0;
+            padding-right: 30px;
+        }
+
+        .article-content li {
+            margin-bottom: 8px;
+            color: #444;
+            font-weight: 300;
+        }
+
+        .article-content blockquote {
+            border-right: 4px solid #e0e0e0;
+            margin: 25px 0;
+            padding: 20px 25px;
+            background-color: #f9f9f9;
+            font-style: italic;
+            color: #666;
+        }
+
+        .article-content code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #e74c3c;
+            font-weight: normal;
+        }
+
+        .article-content pre {
+            background-color: #f8f8f8;
+            padding: 20px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 20px 0;
+            border: 1px solid #e0e0e0;
+            direction: ltr;
+            text-align: left;
+        }
+
+        .article-content pre code {
+            background-color: transparent;
+            padding: 0;
+            color: #333;
+        }
+
+        .article-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            direction: rtl;
+        }
+
+        .article-content table th,
+        .article-content table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: right;
+            font-weight: 300;
+        }
+
+        .article-content table th {
+            background-color: #f8f9fa;
+            font-weight: 400;
+            color: #2c3e50;
+        }
+
+        .article-content table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .article-content hr {
+            border: none;
+            height: 2px;
+            background: linear-gradient(to left, #3498db, transparent);
+            margin: 30px 0;
+        }
+
+        .article-content del {
+            color: #999;
+            text-decoration: line-through;
+        }
+
+        .article-content img {
+            max-width: 100%;
+            height: auto;
+            margin: 20px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .article-footer {
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 2px solid #f0f0f0;
+            text-align: center;
+        }
+
+        .article-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .tag {
+            background-color: #ecf0f1;
+            color: #34495e;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .tag:hover {
+            background-color: #3498db;
+            color: white;
+        }
+
+        /* Loading and error states */
+        .loading {
+            text-align: center;
+            padding: 50px;
+        }
+
+        .error {
+            text-align: center;
+            padding: 50px;
+            color: #e74c3c;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .article-container {
+                padding: 20px 15px;
+            }
+
+            .article-title {
+                font-size: 2rem;
+            }
+
+            .article-meta {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+
+            .article-content {
+                font-size: 1rem;
+            }
+
+            .article-content h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="article-container">
+        <div class="article-header">
+            <a href="index.html" class="back-home">
+                <i class="fas fa-arrow-right"></i>
+                بازگشت به صفحه اصلی
+            </a>
+        </div>
+
+        <div id="article-content-wrapper">
+            <div class="loading">
+                <i class="fas fa-spinner fa-spin"></i>
+                در حال بارگذاری مقاله...
+            </div>
+        </div>
+
+        <div class="article-footer">
+            <div class="article-tags" id="article-tags"></div>
+            <p>&copy; ۲۰۲۵ طاها باختری. تمام حقوق محفوظ است.</p>
+        </div>
+    </div>
+
+    <script src="markdown-renderer.js"></script>
+    <script src="articles.js"></script>
+    <script>
+        // Load article when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // The article loading is now handled by the ArticleManager in articles.js
+        });
+    </script>
+</body>
+</html>
