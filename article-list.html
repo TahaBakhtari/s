@@ -4,35 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>فهرست مقالات - طاها باختری</title>
-    
-    <!-- Open Graph Meta Tags for Social Media Previews -->
-    <meta property="og:title" content="فهرست مقالات - طاها باختری">
-    <meta property="og:description" content="مجموعه مقالات تخصصی در زمینه هوش مصنوعی، یادگیری ماشین، و تکنولوژی‌های نوین AI توسط طاها باختری">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://tahabakhtari.com/article-list.html">
-    <meta property="og:image" content="https://tahabakhtari.com/me.jpg">
-    <meta property="og:image:alt" content="فهرست مقالات طاها باختری">
-    <meta property="og:site_name" content="Taha Bakhtari Portfolio">
-    <meta property="og:locale" content="fa_IR">
-    <meta property="og:locale:alternate" content="en_US">
-    
-    <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@TahaBakhtari">
-    <meta name="twitter:creator" content="@TahaBakhtari">
-    <meta name="twitter:title" content="فهرست مقالات - طاها باختری">
-    <meta name="twitter:description" content="مجموعه مقالات تخصصی در زمینه هوش مصنوعی، یادگیری ماشین، و تکنولوژی‌های نوین AI توسط طاها باختری">
-    <meta name="twitter:image" content="https://tahabakhtari.com/me.jpg">
-    <meta name="twitter:image:alt" content="فهرست مقالات طاها باختری">
-    
-    <!-- Additional Meta Tags -->
-    <meta name="description" content="مجموعه مقالات تخصصی در زمینه هوش مصنوعی، یادگیری ماشین، و تکنولوژی‌های نوین AI توسط طاها باختری">
-    <meta name="keywords" content="مقالات هوش مصنوعی, یادگیری ماشین, طاها باختری, AI فارسی, تکنولوژی, برنامه نویسی">
-    <meta name="author" content="Taha Bakhtari">
-    <meta name="robots" content="index, follow">
-    
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://tahabakhtari.com/article-list.html">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="digi-rastin-font.css">
     <link rel="stylesheet" href="rtl.css">
@@ -103,6 +74,33 @@
 
         .btn-secondary:hover {
             background-color: #7f8c8d;
+        }
+
+        .btn-info {
+            background-color: #17a2b8;
+            color: white;
+        }
+
+        .btn-info:hover {
+            background-color: #138496;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+        .btn-danger {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
         }
 
         .search-section {
@@ -337,6 +335,14 @@
                     <i class="fas fa-arrow-right"></i>
                     بازگشت به خانه
                 </a>
+                <button class="btn btn-info" onclick="generateAllHTMLFiles()" title="ایجاد فایل HTML برای همه مقالات">
+                    <i class="fas fa-file-code"></i>
+                    ایجاد فایل‌های HTML
+                </button>
+                <button class="btn btn-success" onclick="exportAllHTMLFiles()" title="دانلود همه فایل‌های HTML">
+                    <i class="fas fa-download"></i>
+                    دانلود HTML ها
+                </button>
                 <a href="article-editor.html" class="btn btn-primary">
                     <i class="fas fa-plus"></i>
                     مقاله جدید
@@ -500,6 +506,45 @@
                 } else {
                     alert('خطا در حذف مقاله');
                 }
+            }
+        }
+
+        // Generate HTML files for all articles
+        async function generateAllHTMLFiles() {
+            const button = event.target;
+            const originalText = button.innerHTML;
+            
+            // Show loading state
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> در حال ایجاد...';
+            button.disabled = true;
+            
+            try {
+                const count = await articleManager.generateAllHTMLFiles();
+                
+                // Reset button
+                button.innerHTML = originalText;
+                button.disabled = false;
+                
+                if (count > 0) {
+                    alert(`${count} فایل HTML با موفقیت ایجاد شد!`);
+                } else {
+                    alert('هیچ مقاله‌ای برای ایجاد فایل HTML یافت نشد.');
+                }
+            } catch (error) {
+                console.error('Error generating HTML files:', error);
+                button.innerHTML = originalText;
+                button.disabled = false;
+                alert('خطا در ایجاد فایل‌های HTML');
+            }
+        }
+
+        // Export all HTML files
+        function exportAllHTMLFiles() {
+            try {
+                articleManager.exportAllHTMLFiles();
+            } catch (error) {
+                console.error('Error exporting HTML files:', error);
+                alert('خطا در دانلود فایل‌های HTML');
             }
         }
 

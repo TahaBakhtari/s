@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تست سیستم مقالات - طاها باختری</title>
+    <link rel="stylesheet" href="digi-rastin-font.css">
+    <style>
+        body {
+            font-family: 'Digi-Rastin-Plus-Rectangle', Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            direction: rtl;
+            text-align: right;
+            background: #f8f9fa;
+        }
+        
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .test-title {
+            color: #2c3e50;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+        }
+        
+        .test-button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+            font-family: inherit;
+        }
+        
+        .test-button:hover {
+            background: #2980b9;
+        }
+        
+        .result {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+        }
+        
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1 class="test-title">تست سیستم مقالات و ایجاد فایل HTML</h1>
+        
+        <div class="test-section">
+            <h3>تست ۱: ایجاد مقاله نمونه</h3>
+            <p>این تست یک مقاله نمونه ایجاد می‌کند و فایل HTML آن را تولید می‌کند.</p>
+            <button class="test-button" onclick="createTestArticle()">ایجاد مقاله تست</button>
+            <div id="test1-result" class="result"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>تست ۲: ایجاد فایل HTML برای همه مقالات</h3>
+            <p>این تست فایل HTML برای تمام مقالات موجود ایجاد می‌کند.</p>
+            <button class="test-button" onclick="generateAllFiles()">ایجاد همه فایل‌ها</button>
+            <div id="test2-result" class="result"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>تست ۳: نمایش فایل‌های HTML ایجاد شده</h3>
+            <p>این تست لیست فایل‌های HTML ایجاد شده را نمایش می‌دهد.</p>
+            <button class="test-button" onclick="showHTMLFiles()">نمایش فایل‌ها</button>
+            <div id="test3-result" class="result"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>تست ۴: دانلود فایل‌های HTML</h3>
+            <p>این تست فایل‌های HTML ایجاد شده را دانلود می‌کند.</p>
+            <button class="test-button" onclick="downloadAllFiles()">دانلود فایل‌ها</button>
+            <div id="test4-result" class="result"></div>
+        </div>
+        
+        <div style="margin-top: 30px; text-align: center;">
+            <a href="article-list.html" class="test-button">رفتن به مدیریت مقالات</a>
+            <a href="article-editor.html" class="test-button">رفتن به ویرایشگر</a>
+            <a href="index.html" class="test-button">بازگشت به خانه</a>
+        </div>
+    </div>
+
+    <script src="articles.js"></script>
+    <script src="markdown-renderer.js"></script>
+    <script>
+        // Test 1: Create test article
+        async function createTestArticle() {
+            const resultDiv = document.getElementById('test1-result');
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'result info';
+            resultDiv.textContent = 'در حال ایجاد مقاله تست...';
+            
+            try {
+                const testArticle = {
+                    title: 'مقاله تست سیستم',
+                    content: `# مقاله تست سیستم
+
+این یک مقاله تست برای آزمایش سیستم ایجاد فایل HTML است.
+
+## ویژگی‌های تست شده
+
+- ایجاد مقاله جدید
+- تبدیل Markdown به HTML
+- ایجاد فایل HTML مستقل
+- ذخیره در localStorage
+
+## محتوای نمونه
+
+این محتوا شامل **متن پررنگ**، *متن مورب*، و [لینک نمونه](https://example.com) است.
+
+### لیست نمونه
+
+1. مورد اول
+2. مورد دوم  
+3. مورد سوم
+
+> این یک نقل قول نمونه است که برای تست formatting استفاده می‌شود.
+
+\`\`\`javascript
+// نمونه کد
+console.log('سلام دنیا!');
+\`\`\``,
+                    author: 'طاها باختری',
+                    date: new Date().toLocaleDateString('fa-IR'),
+                    tags: ['تست', 'سیستم', 'مقاله']
+                };
+                
+                const slug = articleManager.createArticle(testArticle);
+                
+                resultDiv.className = 'result success';
+                resultDiv.textContent = `مقاله تست با موفقیت ایجاد شد! Slug: ${slug}`;
+                
+            } catch (error) {
+                console.error('Error creating test article:', error);
+                resultDiv.className = 'result error';
+                resultDiv.textContent = 'خطا در ایجاد مقاله تست: ' + error.message;
+            }
+        }
+        
+        // Test 2: Generate all HTML files
+        async function generateAllFiles() {
+            const resultDiv = document.getElementById('test2-result');
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'result info';
+            resultDiv.textContent = 'در حال ایجاد فایل‌های HTML...';
+            
+            try {
+                const count = await articleManager.generateAllHTMLFiles();
+                
+                resultDiv.className = 'result success';
+                resultDiv.textContent = `${count} فایل HTML با موفقیت ایجاد شد!`;
+                
+            } catch (error) {
+                console.error('Error generating HTML files:', error);
+                resultDiv.className = 'result error';
+                resultDiv.textContent = 'خطا در ایجاد فایل‌های HTML: ' + error.message;
+            }
+        }
+        
+        // Test 3: Show HTML files
+        function showHTMLFiles() {
+            const resultDiv = document.getElementById('test3-result');
+            resultDiv.style.display = 'block';
+            
+            try {
+                const htmlFiles = articleManager.getStoredHTMLFiles();
+                const fileCount = Object.keys(htmlFiles).length;
+                
+                if (fileCount === 0) {
+                    resultDiv.className = 'result info';
+                    resultDiv.textContent = 'هیچ فایل HTML یافت نشد. ابتدا فایل‌ها را ایجاد کنید.';
+                    return;
+                }
+                
+                let fileList = `فایل‌های HTML ایجاد شده (${fileCount} فایل):\n\n`;
+                
+                Object.entries(htmlFiles).forEach(([slug, fileData]) => {
+                    const lastGenerated = new Date(fileData.lastGenerated).toLocaleDateString('fa-IR');
+                    fileList += `• ${fileData.filename} (${lastGenerated})\n`;
+                });
+                
+                resultDiv.className = 'result success';
+                resultDiv.innerHTML = fileList.replace(/\n/g, '<br>');
+                
+            } catch (error) {
+                console.error('Error showing HTML files:', error);
+                resultDiv.className = 'result error';
+                resultDiv.textContent = 'خطا در نمایش فایل‌ها: ' + error.message;
+            }
+        }
+        
+        // Test 4: Download files
+        function downloadAllFiles() {
+            const resultDiv = document.getElementById('test4-result');
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'result info';
+            resultDiv.textContent = 'در حال آماده‌سازی دانلود...';
+            
+            try {
+                articleManager.exportAllHTMLFiles();
+                
+                resultDiv.className = 'result success';
+                resultDiv.textContent = 'دانلود فایل‌ها آغاز شد!';
+                
+            } catch (error) {
+                console.error('Error downloading files:', error);
+                resultDiv.className = 'result error';
+                resultDiv.textContent = 'خطا در دانلود فایل‌ها: ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>

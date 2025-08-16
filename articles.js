@@ -69,71 +69,8 @@ class ArticleManager {
         // Update page title
         document.title = article.title + ' - طاها باختری';
         
-        // Update meta tags for social media previews
-        this.updateMetaTags(article, slug);
-        
         // Display article content
         this.displayArticle(article);
-    }
-
-    // Update meta tags for social media previews
-    updateMetaTags(article, slug) {
-        // Generate article URL
-        const articleURL = `${window.location.protocol}//${window.location.host}/${this.generateArticleURL(slug)}`;
-        
-        // Generate description from content (first 160 characters, remove HTML)
-        let description = article.content.replace(/<[^>]*>/g, '').substring(0, 160);
-        if (description.length === 160) {
-            description += '...';
-        }
-        
-        // Determine the best image to use for social media preview
-        let socialImage = 'https://tahabakhtari.com/me.jpg'; // Default image
-        if (article.socialImage) {
-            socialImage = article.socialImage;
-        } else if (article.featuredImage) {
-            socialImage = article.featuredImage;
-        }
-        
-        // Update Open Graph meta tags
-        this.updateMetaTag('og-title', 'content', article.title + ' - طاها باختری');
-        this.updateMetaTag('og-description', 'content', description);
-        this.updateMetaTag('og-url', 'content', articleURL);
-        this.updateMetaTag('og-image', 'content', socialImage);
-        this.updateMetaTag('og-image-alt', 'content', article.title);
-        this.updateMetaTag('og-author', 'content', article.author || 'Taha Bakhtari');
-        this.updateMetaTag('og-published-time', 'content', article.publishDate || article.date);
-        this.updateMetaTag('og-modified-time', 'content', article.lastModified || article.publishDate || article.date);
-        this.updateMetaTag('og-tags', 'content', article.tags ? article.tags.join(', ') : '');
-        
-        // Update Twitter Card meta tags
-        this.updateMetaTag('twitter-title', 'content', article.title + ' - طاها باختری');
-        this.updateMetaTag('twitter-description', 'content', description);
-        this.updateMetaTag('twitter-image', 'content', socialImage);
-        this.updateMetaTag('twitter-image-alt', 'content', article.title);
-        
-        // Update additional meta tags
-        this.updateMetaTag('meta-description', 'content', description);
-        this.updateMetaTag('meta-keywords', 'content', article.tags ? article.tags.join(', ') + ', هوش مصنوعی, طاها باختری' : 'هوش مصنوعی, طاها باختری');
-        
-        // Update canonical URL
-        this.updateLinkTag('canonical-url', 'href', articleURL);
-    }
-    
-    // Helper method to update meta tag content
-    updateMetaTag(id, attribute, value) {
-        const element = document.getElementById(id);
-        if (element) {
-            element.setAttribute(attribute, value);
-        }
-    }
-    
-    // Helper method to update link tag href
-    updateLinkTag(id, attribute, value) {
-        const element = document.getElementById(id);
-        if (element) {
-            element.setAttribute(attribute, value);
-        }
     }
 
     // Display article content
@@ -207,6 +144,10 @@ class ArticleManager {
         
         this.articles[slug] = article;
         this.saveArticles();
+        
+        // Generate HTML file for the article
+        this.generateArticleHTMLFile(slug, article);
+        
         return slug;
     }
 
@@ -219,6 +160,10 @@ class ArticleManager {
                 lastModified: new Date().toISOString()
             };
             this.saveArticles();
+            
+            // Regenerate HTML file for the updated article
+            this.generateArticleHTMLFile(slug, this.articles[slug]);
+            
             return true;
         }
         return false;
@@ -240,6 +185,10 @@ class ArticleManager {
             this.articles[slug].status = 'published';
             this.articles[slug].publishDate = new Date().toISOString();
             this.saveArticles();
+            
+            // Regenerate HTML file when publishing
+            this.generateArticleHTMLFile(slug, this.articles[slug]);
+            
             return true;
         }
         return false;
@@ -258,6 +207,179 @@ class ArticleManager {
     // Get published articles
     getPublishedArticles() {
         return Object.values(this.articles).filter(article => article.status === 'published');
+    }
+
+    // Generate HTML file for article
+    async generateArticleHTMLFile(slug, article) {
+        try {
+            // Load the HTML template
+            const template = await this.loadTemplate();
+            
+            // Render content (convert markdown to HTML if needed)
+            let renderedContent = article.content;
+            if (window.markdownRenderer && article.isMarkdown !== false) {
+                renderedContent = window.markdownRenderer.render(article.content);
+            }
+            
+            // Generate tags section
+            let tagsSection = '';
+            if (article.tags && article.tags.length > 0) {
+                tagsSection = `
+                    <div class="article-tags">
+                        ${article.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                    </div>
+                `;
+            }
+            
+            // Replace template placeholders
+            const htmlContent = template
+                .replace(/\{\{TITLE\}\}/g, article.title || 'بدون عنوان')
+                .replace(/\{\{DESCRIPTION\}\}/g, this.generateDescription(article.content))
+                .replace(/\{\{KEYWORDS\}\}/g, article.tags ? article.tags.join(', ') : '')
+                .replace(/\{\{AUTHOR\}\}/g, article.author || 'طاها باختری')
+                .replace(/\{\{DATE\}\}/g, article.date || new Date().toLocaleDateString('fa-IR'))
+                .replace(/\{\{CONTENT\}\}/g, renderedContent)
+                .replace(/\{\{TAGS_SECTION\}\}/g, tagsSection);
+            
+            // Save the HTML file
+            this.saveHTMLFile(slug, htmlContent);
+            
+        } catch (error) {
+            console.error('Error generating HTML file:', error);
+        }
+    }
+    
+    // Load HTML template
+    async loadTemplate() {
+        try {
+            const response = await fetch('article-template.html');
+            if (!response.ok) {
+                throw new Error('Template not found');
+            }
+            return await response.text();
+        } catch (error) {
+            console.error('Error loading template:', error);
+            // Return a basic template if the file is not found
+            return this.getBasicTemplate();
+        }
+    }
+    
+    // Generate description from content
+    generateDescription(content) {
+        if (!content) return '';
+        
+        // Remove markdown syntax and get first 150 characters
+        const plainText = content
+            .replace(/[#*_`\[\]()]/g, '')
+            .replace(/\n/g, ' ')
+            .trim();
+            
+        return plainText.length > 150 
+            ? plainText.substring(0, 150) + '...'
+            : plainText;
+    }
+    
+    // Save HTML file (this is a simulation - in browser environment)
+    saveHTMLFile(slug, htmlContent) {
+        // In a browser environment, we can't directly save files to the filesystem
+        // But we can provide download functionality or store in localStorage with HTML content
+        
+        // Store HTML content in localStorage for potential export
+        const htmlArticles = JSON.parse(localStorage.getItem('htmlArticles') || '{}');
+        htmlArticles[slug] = {
+            filename: `${slug}.html`,
+            content: htmlContent,
+            lastGenerated: new Date().toISOString()
+        };
+        localStorage.setItem('htmlArticles', JSON.stringify(htmlArticles));
+        
+        // Also trigger download of the HTML file
+        this.downloadHTMLFile(slug, htmlContent);
+    }
+    
+    // Download HTML file
+    downloadHTMLFile(slug, htmlContent) {
+        const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${slug}.html`;
+        a.style.display = 'none';
+        
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        
+        URL.revokeObjectURL(url);
+        
+        // Show notification
+        this.showNotification(`فایل HTML برای مقاله "${slug}" ایجاد شد`, 'success');
+    }
+    
+    // Basic template fallback
+    getBasicTemplate() {
+        return `<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{TITLE}} - طاها باختری</title>
+    <link rel="stylesheet" href="../digi-rastin-font.css">
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        body { font-family: 'Digi-Rastin-Plus-Rectangle', Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 40px 20px; }
+        .article-title { font-size: 2.5rem; color: #2c3e50; text-align: center; margin-bottom: 20px; }
+        .article-meta { text-align: center; color: #666; margin-bottom: 40px; }
+        .article-content { line-height: 1.8; font-size: 1.1rem; }
+    </style>
+</head>
+<body>
+    <h1 class="article-title">{{TITLE}}</h1>
+    <div class="article-meta">{{AUTHOR}} • {{DATE}}</div>
+    <div class="article-content">{{CONTENT}}</div>
+    {{TAGS_SECTION}}
+    <a href="../index.html" style="display: inline-block; margin-top: 30px; padding: 10px 20px; background: #3498db; color: white; text-decoration: none; border-radius: 5px;">بازگشت به صفحه اصلی</a>
+</body>
+</html>`;
+    }
+    
+    // Show notification
+    showNotification(message, type = 'info') {
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: ${type === 'success' ? '#2ecc71' : type === 'error' ? '#e74c3c' : '#3498db'};
+            color: white;
+            padding: 15px 20px;
+            border-radius: 5px;
+            z-index: 9999;
+            font-family: 'Digi-Rastin-Plus-Rectangle', Arial, sans-serif;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        `;
+        notification.textContent = message;
+        
+        document.body.appendChild(notification);
+        
+        // Animate in
+        setTimeout(() => {
+            notification.style.transform = 'translateX(0)';
+        }, 100);
+        
+        // Remove after 4 seconds
+        setTimeout(() => {
+            notification.style.transform = 'translateX(100%)';
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 300);
+        }, 4000);
     }
 
     // Generate URL slug from title
@@ -327,6 +449,64 @@ class ArticleManager {
             };
             reader.onerror = () => reject(new Error('خطا در خواندن فایل'));
             reader.readAsText(file);
+        });
+    }
+
+    // Generate HTML files for all articles
+    async generateAllHTMLFiles() {
+        try {
+            const articles = Object.entries(this.articles);
+            let generated = 0;
+            
+            for (const [slug, article] of articles) {
+                await this.generateArticleHTMLFile(slug, article);
+                generated++;
+            }
+            
+            this.showNotification(`${generated} فایل HTML ایجاد شد`, 'success');
+            return generated;
+        } catch (error) {
+            console.error('Error generating all HTML files:', error);
+            this.showNotification('خطا در ایجاد فایل‌های HTML', 'error');
+            return 0;
+        }
+    }
+
+    // Get stored HTML files
+    getStoredHTMLFiles() {
+        return JSON.parse(localStorage.getItem('htmlArticles') || '{}');
+    }
+
+    // Export all HTML files as ZIP (placeholder for future implementation)
+    exportAllHTMLFiles() {
+        const htmlFiles = this.getStoredHTMLFiles();
+        
+        if (Object.keys(htmlFiles).length === 0) {
+            this.showNotification('هیچ فایل HTML یافت نشد. ابتدا فایل‌ها را ایجاد کنید.', 'error');
+            return;
+        }
+
+        // For now, just show the files that would be included
+        const fileList = Object.values(htmlFiles).map(file => file.filename).join('\n');
+        alert(`فایل‌های موجود برای دانلود:\n\n${fileList}\n\nهر فایل به صورت جداگانه دانلود خواهد شد.`);
+        
+        // Download each file individually
+        Object.entries(htmlFiles).forEach(([slug, fileData]) => {
+            setTimeout(() => {
+                const blob = new Blob([fileData.content], { type: 'text/html;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = fileData.filename;
+                a.style.display = 'none';
+                
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                
+                URL.revokeObjectURL(url);
+            }, 500 * Object.keys(htmlFiles).indexOf(slug));
         });
     }
 }

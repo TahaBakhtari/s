@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مقاله نمونه - طاها باختری</title>
+    <meta name="description" content="این یک مقاله نمونه برای نمایش ساختار فایل‌های HTML ایجاد شده توسط سیستم مدیریت مقالات است.">
+    <meta name="keywords" content="نمونه, مقاله, HTML, سیستم">
+    <meta name="author" content="طاها باختری">
+    
+    <!-- Font Imports -->
+    <link rel="stylesheet" href="../digi-rastin-font.css">
+    <link rel="stylesheet" href="../persian-font.css">
+    <link rel="stylesheet" href="../rtl.css">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../animations.css">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Digi-Rastin-Plus-Rectangle', 'Doran', Arial, sans-serif;
+            background: #ffffff;
+            color: #333;
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .article-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: #ffffff;
+        }
+
+        .article-header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 30px;
+        }
+
+        .article-title {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-weight: 700;
+            line-height: 1.4;
+        }
+
+        .article-meta {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .article-meta > div {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .article-meta i {
+            color: #3498db;
+        }
+
+        .article-content {
+            font-size: 1.1rem;
+            line-height: 1.9;
+            color: #444;
+        }
+
+        .article-content h1,
+        .article-content h2,
+        .article-content h3,
+        .article-content h4,
+        .article-content h5,
+        .article-content h6 {
+            color: #2c3e50;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+
+        .article-content h1 { font-size: 2.2rem; }
+        .article-content h2 { font-size: 1.8rem; }
+        .article-content h3 { font-size: 1.5rem; }
+        .article-content h4 { font-size: 1.3rem; }
+
+        .article-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .article-content blockquote {
+            border-right: 4px solid #3498db;
+            padding: 15px 20px;
+            margin: 20px 0;
+            background: #f8f9fa;
+            font-style: italic;
+        }
+
+        .article-content code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #e74c3c;
+        }
+
+        .article-content pre {
+            background: #2c3e50;
+            color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        .article-content pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+        }
+
+        .article-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .article-content ul,
+        .article-content ol {
+            padding-right: 30px;
+            margin-bottom: 20px;
+        }
+
+        .article-content li {
+            margin-bottom: 8px;
+        }
+
+        .article-tags {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin: 5px 5px 5px 0;
+            text-decoration: none;
+        }
+
+        .tag:hover {
+            background: #2980b9;
+            color: white;
+        }
+
+        .back-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 30px;
+            padding: 12px 20px;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .back-home:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .article-container {
+                padding: 20px 15px;
+            }
+
+            .article-title {
+                font-size: 2rem;
+            }
+
+            .article-meta {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .article-content {
+                font-size: 1rem;
+            }
+        }
+
+        /* Animation for content load */
+        .article-container {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="article-container">
+        <div class="article-header">
+            <h1 class="article-title">مقاله نمونه برای سیستم HTML</h1>
+            <div class="article-meta">
+                <div class="article-author">
+                    <i class="fas fa-user"></i>
+                    <span>طاها باختری</span>
+                </div>
+                <div class="article-date">
+                    <i class="fas fa-calendar"></i>
+                    <span>۱۴۰۳/۱۰/۱۰</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="article-content">
+            <h2>مقدمه</h2>
+            <p>این یک مقاله نمونه است که برای نمایش ساختار فایل‌های HTML ایجاد شده توسط سیستم مدیریت مقالات طراحی شده است. این مقاله شامل انواع مختلف عناصر HTML و formatting است.</p>
+            
+            <h2>ویژگی‌های سیستم</h2>
+            <p>سیستم جدید شامل قابلیت‌های زیر است:</p>
+            
+            <ul>
+                <li><strong>ایجاد خودکار فایل HTML:</strong> هنگام ذخیره هر مقاله، فایل HTML مربوطه نیز ایجاد می‌شود</li>
+                <li><strong>قالب زیبا و responsive:</strong> تمام فایل‌ها با قالب یکسان و زیبا ایجاد می‌شوند</li>
+                <li><strong>پشتیبانی از فونت فارسی:</strong> استفاده از فونت Digi-Rastin-Plus</li>
+                <li><strong>ساختار RTL:</strong> طراحی مناسب برای متن فارسی</li>
+            </ul>
+            
+            <h2>نحوه استفاده</h2>
+            <p>برای استفاده از این سیستم:</p>
+            
+            <ol>
+                <li>وارد ویرایشگر مقالات شوید</li>
+                <li>مقاله خود را بنویسید</li>
+                <li>دکمه ذخیره را بزنید</li>
+                <li>فایل HTML به صورت خودکار ایجاد و دانلود می‌شود</li>
+            </ol>
+            
+            <blockquote>
+                <p>نکته: تمام فایل‌های HTML ایجاد شده در localStorage ذخیره می‌شوند و می‌توانید آن‌ها را مجدداً دانلود کنید.</p>
+            </blockquote>
+            
+            <h2>نمونه کد</h2>
+            <p>در ادامه یک نمونه کد JavaScript برای ایجاد مقاله آورده شده است:</p>
+            
+            <pre><code>const articleData = {
+    title: 'عنوان مقاله',
+    content: 'محتوای مقاله...',
+    author: 'طاها باختری',
+    tags: ['تگ1', 'تگ2']
+};
+
+const slug = articleManager.createArticle(articleData);
+console.log('مقاله ایجاد شد:', slug);</code></pre>
+        </div>
+
+        <div class="article-tags">
+            <span class="tag">نمونه</span><span class="tag">سیستم</span><span class="tag">HTML</span><span class="tag">مقاله</span>
+        </div>
+
+        <a href="../index.html" class="back-home">
+            <i class="fas fa-arrow-right"></i>
+            بازگشت به صفحه اصلی
+        </a>
+    </div>
+
+    <!-- Include markdown renderer for processing -->
+    <script src="../markdown-renderer.js"></script>
+    <script>
+        // Process any markdown content if needed
+        document.addEventListener('DOMContentLoaded', function() {
+            // Already processed during generation
+        });
+    </script>
+</body>
+</html>
