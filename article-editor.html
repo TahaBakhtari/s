@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ویرایشگر مقاله - طاها باختری</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="digi-rastin-font.css">
+    <link rel="stylesheet" href="rtl.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Editor-specific styles */
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            font-family: 'DigiRastinPlus', 'Tahoma', 'Arial', sans-serif;
+            direction: rtl;
+            text-align: right;
+            margin: 0;
+            padding: 0;
+        }
+
+        .editor-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        .editor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 2px solid #e9ecef;
+            margin-bottom: 30px;
+        }
+
+        .editor-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin: 0;
+        }
+
+        .editor-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-family: 'DigiRastinPlus', 'Tahoma', 'Arial', sans-serif;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+
+        .btn-secondary {
+            background-color: #95a5a6;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #7f8c8d;
+        }
+
+        .btn-success {
+            background-color: #27ae60;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #229954;
+        }
+
+        .editor-form {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 30px;
+        }
+
+        .main-editor {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 1rem;
+        }
+
+        .form-input {
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-family: 'DigiRastinPlus', 'Tahoma', 'Arial', sans-serif;
+            direction: rtl;
+            text-align: right;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+        }
+
+        .title-input {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .slug-input {
+            font-family: 'Courier New', monospace;
+            direction: ltr;
+            text-align: left;
+            background-color: #f8f9fa;
+        }
+
+        .content-editor {
+            min-height: 500px;
+            resize: vertical;
+            font-family: 'DigiRastinPlus', 'Tahoma', 'Arial', sans-serif;
+            line-height: 1.6;
+        }
+
+        .sidebar {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+
+        .sidebar-section {
+            margin-bottom: 25px;
+        }
+
+        .sidebar-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .tags-input {
+            margin-bottom: 10px;
+        }
+
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .tag {
+            background-color: #3498db;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .tag-remove {
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .tag-remove:hover {
+            color: #e74c3c;
+        }
+
+        .preview-section {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px solid #e9ecef;
+        }
+
+        .preview-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+            font-family: 'DigiRastinPlus', 'Tahoma', 'Arial', sans-serif;
+            line-height: 1.8;
+            direction: rtl;
+            text-align: right;
+        }
+
+        .preview-content h1,
+        .preview-content h2,
+        .preview-content h3,
+        .preview-content h4,
+        .preview-content h5,
+        .preview-content h6 {
+            color: #2c3e50;
+            margin: 20px 0 10px 0;
+        }
+
+        .preview-content h2 {
+            border-right: 4px solid #3498db;
+            padding-right: 15px;
+        }
+
+        .preview-content p {
+            margin-bottom: 15px;
+            color: #444;
+        }
+
+        .preview-content ul,
+        .preview-content ol {
+            margin: 15px 0;
+            padding-right: 25px;
+        }
+
+        .preview-content blockquote {
+            border-right: 4px solid #e0e0e0;
+            margin: 20px 0;
+            padding: 15px 20px;
+            background-color: #f9f9f9;
+            font-style: italic;
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            border: 1px solid #e9ecef;
+        }
+
+        .toolbar-btn {
+            padding: 5px 10px;
+            border: 1px solid #dee2e6;
+            background-color: white;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .toolbar-btn:hover {
+            background-color: #e9ecef;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #27ae60;
+        }
+
+        .status-text {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .editor-container {
+                padding: 15px;
+            }
+
+            .editor-form {
+                grid-template-columns: 1fr;
+            }
+
+            .editor-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+
+            .editor-actions {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .content-editor {
+                min-height: 300px;
+            }
+        }
+
+        /* Animation for saving */
+        .saving {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .save-success {
+            animation: saveSuccess 2s ease-in-out;
+        }
+
+        @keyframes saveSuccess {
+            0% { background-color: transparent; }
+            50% { background-color: #d4edda; }
+            100% { background-color: transparent; }
+        }
+    </style>
+</head>
+<body>
+    <div class="editor-container">
+        <div class="editor-header">
+            <h1 class="editor-title">ویرایشگر مقاله</h1>
+            <div class="editor-actions">
+                <a href="index.html" class="btn btn-secondary">
+                    <i class="fas fa-arrow-right"></i>
+                    بازگشت
+                </a>
+                <button type="button" class="btn btn-primary" onclick="previewArticle()">
+                    <i class="fas fa-eye"></i>
+                    پیش‌نمایش
+                </button>
+                <button type="button" class="btn btn-success" onclick="saveArticle()">
+                    <i class="fas fa-save"></i>
+                    ذخیره
+                </button>
+            </div>
+        </div>
+
+        <form class="editor-form" id="article-form">
+            <div class="main-editor">
+                <div class="form-group">
+                    <label class="form-label" for="article-title">عنوان مقاله</label>
+                    <input type="text" id="article-title" class="form-input title-input" 
+                           placeholder="عنوان مقاله خود را وارد کنید..." 
+                           onchange="generateSlug()">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="article-slug">نشانی مقاله (URL Slug)</label>
+                    <input type="text" id="article-slug" class="form-input slug-input" 
+                           placeholder="article-url-slug" 
+                           pattern="[a-z0-9-]+" 
+                           title="فقط حروف انگلیسی کوچک، اعداد و خط تیره مجاز است">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="article-content">محتوای مقاله</label>
+                    <div class="toolbar">
+                        <button type="button" class="toolbar-btn" onclick="insertFormat('h2')" title="سرتیتر">
+                            <i class="fas fa-heading"></i>
+                        </button>
+                        <button type="button" class="toolbar-btn" onclick="insertFormat('bold')" title="پررنگ">
+                            <i class="fas fa-bold"></i>
+                        </button>
+                        <button type="button" class="toolbar-btn" onclick="insertFormat('italic')" title="کج">
+                            <i class="fas fa-italic"></i>
+                        </button>
+                        <button type="button" class="toolbar-btn" onclick="insertFormat('list')" title="فهرست">
+                            <i class="fas fa-list-ul"></i>
+                        </button>
+                        <button type="button" class="toolbar-btn" onclick="insertFormat('quote')" title="نقل قول">
+                            <i class="fas fa-quote-right"></i>
+                        </button>
+                        <button type="button" class="toolbar-btn" onclick="insertFormat('link')" title="لینک">
+                            <i class="fas fa-link"></i>
+                        </button>
+                        <button type="button" class="toolbar-btn" onclick="insertFormat('image')" title="تصویر">
+                            <i class="fas fa-image"></i>
+                        </button>
+                        <button type="button" class="toolbar-btn" onclick="insertFormat('code')" title="کد">
+                            <i class="fas fa-code"></i>
+                        </button>
+                        <button type="button" class="toolbar-btn" onclick="insertFormat('table')" title="جدول">
+                            <i class="fas fa-table"></i>
+                        </button>
+                        <button type="button" class="toolbar-btn" onclick="showMarkdownHelp()" title="راهنما">
+                            <i class="fas fa-question-circle"></i>
+                        </button>
+                    </div>
+                    <textarea id="article-content" class="form-input content-editor" 
+                              placeholder="محتوای مقاله خود را با Markdown بنویسید...
+
+راهنمای Markdown:
+# سرتیتر 1
+## سرتیتر 2  
+### سرتیتر 3
+
+**متن پررنگ** *متن کج*
+
+- فهرست غیرشماره‌دار
+1. فهرست شماره‌دار
+
+[متن لینک](آدرس)
+![توضیحات تصویر](آدرس تصویر)
+
+> نقل قول
+
+`کد درون‌خطی`
+
+```
+بلوک کد
+```
+
+| ستون 1 | ستون 2 |
+|--------|--------|
+| سلول 1 | سلول 2 |"></textarea>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="sidebar-section">
+                    <div class="status-indicator">
+                        <div class="status-dot"></div>
+                        <span class="status-text">آماده برای ذخیره</span>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">برچسب‌ها</h3>
+                    <input type="text" id="tag-input" class="form-input tags-input" 
+                           placeholder="برچسب جدید..." 
+                           onkeypress="handleTagInput(event)">
+                    <div class="tags-container" id="tags-container"></div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">نویسنده</h3>
+                    <input type="text" id="article-author" class="form-input" 
+                           value="طاها باختری" readonly>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">تاریخ انتشار</h3>
+                    <input type="text" id="article-date" class="form-input" 
+                           value="" readonly>
+                </div>
+            </div>
+        </form>
+
+        <div class="preview-section" id="preview-section" style="display: none;">
+            <h2>پیش‌نمایش</h2>
+            <div class="preview-content" id="preview-content"></div>
+        </div>
+    </div>
+
+    <script src="markdown-renderer.js"></script>
+    <script src="articles.js"></script>
+    <script>
+        // Initialize date
+        document.getElementById('article-date').value = new Date().toLocaleDateString('fa-IR');
+
+        let tags = [];
+
+        // Generate URL slug from title
+        function generateSlug() {
+            const title = document.getElementById('article-title').value;
+            const slug = title
+                .toLowerCase()
+                .replace(/[^a-z0-9\s-]/g, '') // Remove special characters
+                .replace(/\s+/g, '-') // Replace spaces with hyphens
+                .replace(/-+/g, '-') // Replace multiple hyphens with single
+                .trim('-'); // Remove leading/trailing hyphens
+
+            document.getElementById('article-slug').value = slug;
+        }
+
+        // Handle tag input
+        function handleTagInput(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                addTag();
+            }
+        }
+
+        // Add tag
+        function addTag() {
+            const input = document.getElementById('tag-input');
+            const tag = input.value.trim();
+            
+            if (tag && !tags.includes(tag)) {
+                tags.push(tag);
+                updateTagsDisplay();
+                input.value = '';
+            }
+        }
+
+        // Remove tag
+        function removeTag(tagToRemove) {
+            tags = tags.filter(tag => tag !== tagToRemove);
+            updateTagsDisplay();
+        }
+
+        // Update tags display
+        function updateTagsDisplay() {
+            const container = document.getElementById('tags-container');
+            container.innerHTML = tags.map(tag => `
+                <span class="tag">
+                    ${tag}
+                    <span class="tag-remove" onclick="removeTag('${tag}')">&times;</span>
+                </span>
+            `).join('');
+        }
+
+        // Insert formatting
+        function insertFormat(type) {
+            const textarea = document.getElementById('article-content');
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const selectedText = textarea.value.substring(start, end);
+            let replacement = '';
+
+            switch (type) {
+                case 'h2':
+                    replacement = `## ${selectedText || 'سرتیتر'}`;
+                    break;
+                case 'bold':
+                    replacement = `**${selectedText || 'متن پررنگ'}**`;
+                    break;
+                case 'italic':
+                    replacement = `*${selectedText || 'متن کج'}*`;
+                    break;
+                case 'list':
+                    replacement = `- ${selectedText || 'آیتم فهرست'}`;
+                    break;
+                case 'quote':
+                    replacement = `> ${selectedText || 'نقل قول'}`;
+                    break;
+                case 'link':
+                    replacement = `[${selectedText || 'متن لینک'}](آدرس-لینک)`;
+                    break;
+                case 'image':
+                    replacement = `![${selectedText || 'توضیحات تصویر'}](آدرس-تصویر)`;
+                    break;
+                case 'code':
+                    if (selectedText.includes('\n')) {
+                        replacement = `\`\`\`\n${selectedText || 'کد شما'}\n\`\`\``;
+                    } else {
+                        replacement = `\`${selectedText || 'کد'}\``;
+                    }
+                    break;
+                case 'table':
+                    replacement = `| ستون 1 | ستون 2 | ستون 3 |
+|---------|---------|---------|
+| سلول 1  | سلول 2  | سلول 3  |
+| سلول 4  | سلول 5  | سلول 6  |`;
+                    break;
+            }
+
+            textarea.value = textarea.value.substring(0, start) + replacement + textarea.value.substring(end);
+            textarea.focus();
+            textarea.setSelectionRange(start, start + replacement.length);
+        }
+
+        // Convert markdown to HTML using our renderer
+        function convertToHTML(content) {
+            if (window.markdownRenderer) {
+                return window.markdownRenderer.render(content);
+            }
+            // Fallback to simple conversion if renderer not loaded
+            return content
+                .replace(/^## (.*$)/gm, '<h2>$1</h2>')
+                .replace(/^### (.*$)/gm, '<h3>$1</h3>')
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/^- (.*$)/gm, '<li>$1</li>')
+                .replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>')
+                .replace(/^> (.*$)/gm, '<blockquote><p>$1</p></blockquote>')
+                .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>')
+                .replace(/^(?!<[hul]|<blockquote)(.*$)/gm, '<p>$1</p>')
+                .replace(/<p><\/p>/g, '')
+                .replace(/<p>\s*<\/p>/g, '');
+        }
+
+        // Preview article
+        function previewArticle() {
+            const title = document.getElementById('article-title').value;
+            const content = document.getElementById('article-content').value;
+            const previewSection = document.getElementById('preview-section');
+            const previewContent = document.getElementById('preview-content');
+
+            if (!title || !content) {
+                alert('لطفا عنوان و محتوای مقاله را وارد کنید.');
+                return;
+            }
+
+            const htmlContent = convertToHTML(content);
+            previewContent.innerHTML = `<h1>${title}</h1>${htmlContent}`;
+            previewSection.style.display = 'block';
+            previewSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Save article
+        function saveArticle() {
+            const title = document.getElementById('article-title').value;
+            const slug = document.getElementById('article-slug').value;
+            const content = document.getElementById('article-content').value;
+            const author = document.getElementById('article-author').value;
+            const date = document.getElementById('article-date').value;
+
+            if (!title || !slug || !content) {
+                alert('لطفا تمام فیلدهای ضروری را پر کنید.');
+                return;
+            }
+
+            // Simulate saving
+            const container = document.querySelector('.editor-container');
+            container.classList.add('saving');
+
+            setTimeout(() => {
+                container.classList.remove('saving');
+                container.classList.add('save-success');
+                
+                // Create article data - store raw markdown
+                const articleData = {
+                    title,
+                    content: content, // Store raw markdown
+                    author,
+                    date,
+                    tags,
+                    isMarkdown: true
+                };
+
+                // Check if editing existing article
+                const urlParams = new URLSearchParams(window.location.search);
+                const editSlug = urlParams.get('edit');
+
+                if (editSlug) {
+                    // Update existing article
+                    if (articleManager.updateArticle(editSlug, articleData)) {
+                        document.querySelector('.status-text').textContent = 'به‌روزرسانی شد';
+                        alert('مقاله با موفقیت به‌روزرسانی شد!');
+                    } else {
+                        alert('خطا در به‌روزرسانی مقاله');
+                        return;
+                    }
+                } else {
+                    // Create new article
+                    const newSlug = articleManager.createArticle(articleData);
+                    document.querySelector('.status-text').textContent = 'ذخیره شد';
+                    alert('مقاله با موفقیت ذخیره شد!');
+                    
+                    // Update URL to edit mode
+                    const newUrl = new URL(window.location);
+                    newUrl.searchParams.set('edit', newSlug);
+                    window.history.replaceState({}, '', newUrl);
+                }
+                
+                setTimeout(() => {
+                    container.classList.remove('save-success');
+                    document.querySelector('.status-text').textContent = 'آماده برای ذخیره';
+                }, 2000);
+                
+            }, 1000);
+        }
+
+        // Auto-save functionality
+        let autoSaveTimeout;
+        function autoSave() {
+            clearTimeout(autoSaveTimeout);
+            autoSaveTimeout = setTimeout(() => {
+                const title = document.getElementById('article-title').value;
+                const content = document.getElementById('article-content').value;
+                
+                if (title && content) {
+                    // Simulate auto-save
+                    document.querySelector('.status-text').textContent = 'در حال ذخیره خودکار...';
+                    setTimeout(() => {
+                        document.querySelector('.status-text').textContent = 'ذخیره خودکار انجام شد';
+                        setTimeout(() => {
+                            document.querySelector('.status-text').textContent = 'آماده برای ذخیره';
+                        }, 2000);
+                    }, 500);
+                }
+            }, 3000);
+        }
+
+        // Add auto-save listeners
+        document.getElementById('article-title').addEventListener('input', autoSave);
+        document.getElementById('article-content').addEventListener('input', autoSave);
+
+        // Load existing article for editing
+        function loadExistingArticle() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const editSlug = urlParams.get('edit');
+            
+            if (editSlug) {
+                const article = articleManager.getArticle(editSlug);
+                if (article) {
+                    document.getElementById('article-title').value = article.title;
+                    document.getElementById('article-slug').value = article.slug;
+                    
+                    // Load content - if it's markdown, use as-is, otherwise convert HTML to markdown-like
+                    if (article.isMarkdown) {
+                        document.getElementById('article-content').value = article.content;
+                    } else {
+                        // Basic HTML to markdown conversion for older articles
+                        let content = article.content
+                            .replace(/<h2>/g, '## ')
+                            .replace(/<\/h2>/g, '\n\n')
+                            .replace(/<h3>/g, '### ')
+                            .replace(/<\/h3>/g, '\n\n')
+                            .replace(/<strong>/g, '**')
+                            .replace(/<\/strong>/g, '**')
+                            .replace(/<em>/g, '*')
+                            .replace(/<\/em>/g, '*')
+                            .replace(/<li>/g, '- ')
+                            .replace(/<\/li>/g, '\n')
+                            .replace(/<ul>/g, '\n')
+                            .replace(/<\/ul>/g, '\n')
+                            .replace(/<blockquote><p>/g, '> ')
+                            .replace(/<\/p><\/blockquote>/g, '\n\n')
+                            .replace(/<p>/g, '')
+                            .replace(/<\/p>/g, '\n\n')
+                            .replace(/\n\n+/g, '\n\n')
+                            .trim();
+                        document.getElementById('article-content').value = content;
+                    }
+                    
+                    document.getElementById('article-author').value = article.author;
+                    document.getElementById('article-date').value = article.date;
+                    
+                    // Load tags
+                    tags = [...(article.tags || [])];
+                    updateTagsDisplay();
+                    
+                    // Update page title
+                    document.querySelector('.editor-title').textContent = 'ویرایش مقاله: ' + article.title;
+                }
+            }
+        }
+
+        // Show markdown help
+        function showMarkdownHelp() {
+            if (window.markdownRenderer) {
+                const help = window.markdownRenderer.getMarkdownHelp();
+                let helpContent = 'راهنمای Markdown:\n\n';
+                
+                Object.entries(help).forEach(([key, value]) => {
+                    helpContent += `${value.description}:\n${value.syntax}\n\n`;
+                });
+                
+                alert(helpContent);
+            } else {
+                alert(`راهنمای Markdown:
+
+سرتیترها:
+# سرتیتر 1
+## سرتیتر 2
+### سرتیتر 3
+
+تأکید:
+**متن پررنگ**
+*متن کج*
+
+فهرست‌ها:
+- آیتم 1
+- آیتم 2
+
+1. آیتم شماره‌دار 1
+2. آیتم شماره‌دار 2
+
+لینک و تصویر:
+[متن لینک](آدرس)
+![توضیحات](آدرس تصویر)
+
+نقل قول:
+> این یک نقل قول است
+
+کد:
+\`کد درون‌خطی\`
+
+\`\`\`
+بلوک کد
+\`\`\`
+
+جدول:
+| ستون 1 | ستون 2 |
+|--------|--------|
+| سلول 1 | سلول 2 |`);
+            }
+        }
+
+        // Initialize editor
+        document.addEventListener('DOMContentLoaded', function() {
+            loadExistingArticle();
+        });
+    </script>
+</body>
+</html>

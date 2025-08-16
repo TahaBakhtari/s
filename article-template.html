@@ -8,24 +8,57 @@
     <meta name="keywords" content="{{KEYWORDS}}">
     <meta name="author" content="{{AUTHOR}}">
     
-    <!-- Font Imports -->
-    <link rel="stylesheet" href="../digi-rastin-font.css">
-    <link rel="stylesheet" href="../persian-font.css">
-    <link rel="stylesheet" href="../rtl.css">
-    <link rel="stylesheet" href="../styles.css">
-    <link rel="stylesheet" href="../animations.css">
-    
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
+        /* Font Definitions */
+        @font-face {
+            font-family: 'DigiRastinPlus';
+            font-style: normal;
+            font-weight: 300;
+            src: url('../Digi-Rastin-Plus/Digi Rastin Plus Rectangle.ttf') format('truetype');
+        }
+
+        @font-face {
+            font-family: 'DigiRastinPlus';
+            font-style: normal;
+            font-weight: 400;
+            src: url('../Digi-Rastin-Plus/Digi Rastin Plus Rectangle.ttf') format('truetype');
+        }
+
+        @font-face {
+            font-family: 'DigiRastinPlus';
+            font-style: normal;
+            font-weight: 500;
+            src: url('../Digi-Rastin-Plus/Digi Rastin Plus Rectangle.ttf') format('truetype');
+        }
+
+        @font-face {
+            font-family: 'DigiRastinPlus';
+            font-style: normal;
+            font-weight: 700;
+            src: url('../Digi-Rastin-Plus/Digi Rastin Plus Rectangle.ttf') format('truetype');
+        }
+        
+        /* RTL Base Styles */
+        html {
+            direction: rtl;
+        }
+        
         body {
-            font-family: 'Digi-Rastin-Plus-Rectangle', 'Doran', Arial, sans-serif;
+            font-family: 'DigiRastinPlus', 'Tahoma', 'Segoe UI', Arial, sans-serif;
             background: #ffffff;
             color: #333;
             line-height: 1.8;
             margin: 0;
             padding: 0;
+            direction: rtl;
+            text-align: right;
+        }
+
+        * {
+            direction: rtl;
         }
 
         .article-container {

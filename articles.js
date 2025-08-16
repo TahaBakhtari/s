@@ -279,12 +279,9 @@ class ArticleManager {
             : plainText;
     }
     
-    // Save HTML file (this is a simulation - in browser environment)
+    // Save HTML file (download for manual placement in articles folder)
     saveHTMLFile(slug, htmlContent) {
-        // In a browser environment, we can't directly save files to the filesystem
-        // But we can provide download functionality or store in localStorage with HTML content
-        
-        // Store HTML content in localStorage for potential export
+        // Store HTML content in localStorage for potential re-download
         const htmlArticles = JSON.parse(localStorage.getItem('htmlArticles') || '{}');
         htmlArticles[slug] = {
             filename: `${slug}.html`,
@@ -293,8 +290,11 @@ class ArticleManager {
         };
         localStorage.setItem('htmlArticles', JSON.stringify(htmlArticles));
         
-        // Also trigger download of the HTML file
+        // Download the HTML file for manual placement in articles folder
         this.downloadHTMLFile(slug, htmlContent);
+        
+        // Show instructions to user
+        this.showHTMLFileInstructions(slug);
     }
     
     // Download HTML file
@@ -313,8 +313,8 @@ class ArticleManager {
         
         URL.revokeObjectURL(url);
         
-        // Show notification
-        this.showNotification(`فایل HTML برای مقاله "${slug}" ایجاد شد`, 'success');
+        // Show notification with instructions
+        this.showNotification(`فایل HTML برای مقاله "${slug}" ایجاد و دانلود شد!`, 'success');
     }
     
     // Basic template fallback
@@ -325,25 +325,147 @@ class ArticleManager {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{TITLE}} - طاها باختری</title>
-    <link rel="stylesheet" href="../digi-rastin-font.css">
-    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { font-family: 'Digi-Rastin-Plus-Rectangle', Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 40px 20px; }
-        .article-title { font-size: 2.5rem; color: #2c3e50; text-align: center; margin-bottom: 20px; }
-        .article-meta { text-align: center; color: #666; margin-bottom: 40px; }
-        .article-content { line-height: 1.8; font-size: 1.1rem; }
+        @font-face {
+            font-family: 'DigiRastinPlus';
+            src: url('../Digi-Rastin-Plus/Digi Rastin Plus Rectangle.ttf') format('truetype');
+        }
+        html { direction: rtl; }
+        body { 
+            font-family: 'DigiRastinPlus', 'Tahoma', Arial, sans-serif; 
+            max-width: 800px; 
+            margin: 0 auto; 
+            padding: 40px 20px; 
+            direction: rtl; 
+            text-align: right;
+            background: #ffffff;
+            color: #333;
+            line-height: 1.8;
+        }
+        * { direction: rtl; }
+        .article-title { 
+            font-size: 2.5rem; 
+            color: #2c3e50; 
+            text-align: center; 
+            margin-bottom: 20px; 
+            font-weight: 700;
+        }
+        .article-meta { 
+            text-align: center; 
+            color: #666; 
+            margin-bottom: 40px; 
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .article-content { 
+            line-height: 1.8; 
+            font-size: 1.1rem; 
+            text-align: right;
+        }
+        .article-content h1, .article-content h2, .article-content h3 {
+            color: #2c3e50;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+        .article-content p {
+            margin-bottom: 1.5rem;
+        }
+        .article-tags {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #f0f0f0;
+        }
+        .tag {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin: 5px 5px 5px 0;
+            text-decoration: none;
+        }
     </style>
 </head>
 <body>
-    <h1 class="article-title">{{TITLE}}</h1>
-    <div class="article-meta">{{AUTHOR}} • {{DATE}}</div>
+    <div style="text-align: center; margin-bottom: 40px; border-bottom: 2px solid #f0f0f0; padding-bottom: 30px;">
+        <h1 class="article-title">{{TITLE}}</h1>
+        <div class="article-meta">
+            <div><i class="fas fa-user"></i> {{AUTHOR}}</div>
+            <div><i class="fas fa-calendar"></i> {{DATE}}</div>
+        </div>
+    </div>
     <div class="article-content">{{CONTENT}}</div>
     {{TAGS_SECTION}}
-    <a href="../index.html" style="display: inline-block; margin-top: 30px; padding: 10px 20px; background: #3498db; color: white; text-decoration: none; border-radius: 5px;">بازگشت به صفحه اصلی</a>
+    <a href="../index.html" style="display: inline-flex; align-items: center; gap: 8px; margin-top: 30px; padding: 12px 20px; background: #3498db; color: white; text-decoration: none; border-radius: 25px; font-weight: 500;"><i class="fas fa-arrow-right"></i> بازگشت به صفحه اصلی</a>
 </body>
 </html>`;
     }
     
+    // Show HTML file instructions
+    showHTMLFileInstructions(slug) {
+        setTimeout(() => {
+            const instructions = `
+📁 فایل HTML دانلود شد!
+
+✅ مراحل بعدی:
+1. فایل ${slug}.html را از Downloads پیدا کنید
+2. آن را در پوشه "articles" کپی کنید  
+3. حالا می‌توانید از آدرس زیر دسترسی داشته باشید:
+   site.com/articles/${slug}.html
+
+💡 نکته: فایل برای استفاده مستقل آماده است
+`;
+            
+            // Show in a modal-like notification
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0,0,0,0.7);
+                z-index: 10000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-family: 'DigiRastinPlus', 'Tahoma', Arial, sans-serif;
+            `;
+            
+            modal.innerHTML = `
+                <div style="
+                    background: white;
+                    padding: 30px;
+                    border-radius: 10px;
+                    max-width: 500px;
+                    text-align: center;
+                    direction: rtl;
+                    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                ">
+                    <h3 style="color: #2c3e50; margin-bottom: 20px;">فایل HTML ایجاد شد!</h3>
+                    <div style="text-align: right; line-height: 1.8; color: #555; white-space: pre-line; margin-bottom: 20px;">
+                        ${instructions}
+                    </div>
+                    <button onclick="this.parentElement.parentElement.remove()" style="
+                        background: #3498db;
+                        color: white;
+                        border: none;
+                        padding: 10px 20px;
+                        border-radius: 5px;
+                        cursor: pointer;
+                        font-family: inherit;
+                    ">متوجه شدم</button>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+        }, 500);
+    }
+
     // Show notification
     showNotification(message, type = 'info') {
         // Create notification element

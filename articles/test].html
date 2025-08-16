@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>چرا مدل‌های زبانی بزرگ نمی‌تونن نرم‌افزار بسازن - طاها باختری</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @font-face {
+            font-family: 'DigiRastinPlus';
+            src: url('../Digi-Rastin-Plus/Digi Rastin Plus Rectangle.ttf') format('truetype');
+        }
+        html { direction: rtl; }
+        body { 
+            font-family: 'DigiRastinPlus', 'Tahoma', Arial, sans-serif; 
+            max-width: 800px; 
+            margin: 0 auto; 
+            padding: 40px 20px; 
+            direction: rtl; 
+            text-align: right;
+            background: #ffffff;
+            color: #333;
+            line-height: 1.8;
+        }
+        * { direction: rtl; }
+        .article-title { 
+            font-size: 2.5rem; 
+            color: #2c3e50; 
+            text-align: center; 
+            margin-bottom: 20px; 
+            font-weight: 700;
+        }
+        .article-meta { 
+            text-align: center; 
+            color: #666; 
+            margin-bottom: 40px; 
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .article-content { 
+            line-height: 1.8; 
+            font-size: 1.1rem; 
+            text-align: right;
+        }
+        .article-content h1, .article-content h2, .article-content h3 {
+            color: #2c3e50;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        .article-content h1 { font-size: 2.2rem; }
+        .article-content h2 { font-size: 1.8rem; }
+        .article-content h3 { font-size: 1.5rem; }
+        .article-content p {
+            margin-bottom: 1.5rem;
+        }
+        .article-content ol, .article-content ul {
+            padding-right: 30px;
+            margin-bottom: 20px;
+        }
+        .article-content li {
+            margin-bottom: 8px;
+        }
+        .article-content strong {
+            font-weight: 700;
+            color: #2c3e50;
+        }
+        .article-tags {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #f0f0f0;
+        }
+        .tag {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin: 5px 5px 5px 0;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div style="text-align: center; margin-bottom: 40px; border-bottom: 2px solid #f0f0f0; padding-bottom: 30px;">
+        <h1 class="article-title">چرا مدل‌های زبانی بزرگ نمی‌تونن نرم‌افزار بسازن</h1>
+        <div class="article-meta">
+            <div><i class="fas fa-user"></i> طاها باختری</div>
+            <div><i class="fas fa-calendar"></i> ۱۴۰۴/۵/۲۵</div>
+        </div>
+    </div>
+    <div class="article-content">
+        <h3>چرخه مهندسی نرم‌افزار</h3>
+        <p>وقتی یه نفر که کارشو بلده نگاه می‌کنی، می‌بینی که مدام داره این مراحل رو تکرار می‌کنه:</p>
+
+        <ol>
+            <li>یه مدل ذهنی از نیازها و خواسته‌ها می‌سازه.</li>
+            <li>کدی می‌نویسه که امیدواره اون نیازها رو برآورده کنه!</li>
+            <li>یه مدل ذهنی از چیزی که کد واقعاً انجام می‌ده می‌سازه.</li>
+            <li>تفاوت‌ها رو پیدا می‌کنه و کد یا نیازها رو به‌روزرسانی می‌کنه.</li>
+        </ol>
+
+        <p>راه‌های مختلفی برای انجام این کارها وجود داره، ولی چیزی که مهندس‌های خوب رو متمایز می‌کنه، توانایی‌شون در ساختن و نگه داشتن مدل‌های ذهنی شفافه.</p>
+
+        <h3>مدل‌های زبانی بزرگ چی؟</h3>
+        <p>برای انصاف باید گفت که مدل‌های زبانی بزرگ (LLMها) تو نوشتن کد خیلی خوبن. تو به‌روزرسانی کد هم وقتی بهشون بگی چه مشکلی باید درست بشه، عملکرد قابل قبولی دارن. حتی می‌تونن کارهایی که مهندس‌های نرم‌افزار واقعی انجام می‌دن رو هم بکنن: کد بخونن، تست بنویسن و اجرا کنن، لاگ اضافه کنن و (احتمالاً) از دیباگر استفاده کنن.</p>
+
+        <p>اما چیزی که نمی‌تونن بکنن، نگه داشتن مدل‌های ذهنی شفافه.</p>
+
+        <p>این مدل‌ها مدام گیج می‌شن: فکر می‌کنن کدی که نوشتن واقعاً کار می‌کنه؛ وقتی تست‌ها خراب می‌شن، نمی‌دونن باید کد رو درست کنن یا تست‌ها رو؛ و وقتی اوضاع سخت می‌شه، همه‌چیزو پاک می‌کنن و از اول شروع می‌کنن.</p>
+
+این دقیقاً برعکس چیزیه که من دنبالشم.
+
+مهندس‌های نرم‌افزار کارشونو حین انجام تست می‌کنن. وقتی تست‌ها خراب می‌شن، با مدل ذهنی‌شون چک می‌کنن که باید کد رو درست کنن، تست‌ها رو تغییر بدن یا قبل از تصمیم‌گیری اطلاعات بیشتری جمع کنن. وقتی ناامید می‌شن، می‌تونن با حرف زدن با بقیه کمک بگیرن. و اگرچه گاهی همه‌چیزو پاک می‌کنن و از اول شروع می‌کنن، این کارو با درک بهتری از مشکل انجام می‌دن.
+
+### حالا به زودی درست می‌شه، نه؟
+آیا با قوی‌تر شدن مدل‌ها این مشکل حل می‌شه؟ شاید؟ ولی فکر می‌کنم نیاز به تغییر اساسی تو نحوه ساخت و بهینه‌سازی این مدل‌ها داره. مهندسی نرم‌افزار به مدل‌هایی نیاز داره که فقط کد تولید نکنن.
+
+وقتی یه آدم با مشکلی روبه‌رو می‌شه، می‌تونه کل زمینه و موضوع رو موقتاً کنار بذاره، روی حل مشکل تمرکز کنه و بعد برگرده به موضوع اصلی. همچنین می‌تونه یه قدم عقب بره و به کلیت قضیه نگاه کنه، جزئیات رو موقتاً نادیده بگیره و هرجا لازم بود به بخش‌های کوچیک‌تر بپردازه. ما نمی‌تونیم مدام به پنجره زمینه‌مون کلمه اضافه کنیم، چون دیوونه‌مون می‌کنه!
+
+حتی اگه بحث فقط حجم زیاد زمینه نباشه، می‌دونیم که مدل‌های تولیدی فعلی چندتا مشکل دارن که مستقیماً روی توانایی‌شون برای نگه داشتن مدل‌های ذهنی شفاف اثر می‌ذاره:
+
+- **حذف زمینه**: مدل‌ها تو پیدا کردن زمینه‌ای که جا افتاده ضعیفن.
+- **تعصب به اطلاعات جدید**: تو پنجره زمینه‌شون به شدت به اطلاعات جدیدتر اهمیت می‌دن.
+- **توهم**: اغلب جزئیاتی رو اضافه می‌کنن که نباید باشن.
+
+امیدواریم این مشکلات قابل حل باشن و کارهایی داره انجام می‌شه تا حافظه به این مدل‌ها اضافه بشه که بتونن ترفندهای ذهنی شبیه ما رو انجام بدن. ولی فعلاً، وقتی پیچیدگی از یه حدی بیشتر می‌شه، این مدل‌ها واقعاً نمی‌فهمن چی به چیه.
+
+نمی‌تونن نرم‌افزار بسازن چون نمی‌تونن دو مدل ذهنی شبیه به هم رو نگه دارن، تفاوت‌هاشونو پیدا کنن و تصمیم بگیرن که کد رو به‌روزرسانی کنن یا نیازها رو.
+
+### حالا چی؟
+واضحه که مدل‌های زبانی بزرگ برای مهندس‌های نرم‌افزار مفیدن. می‌تونن سریع کد تولید کنن و تو جمع‌بندی نیازها و نوشتن مستندات عالی هستن. برای بعضی کارها این کافیه: نیازها به اندازه کافی شفافن و مشکلات به اندازه کافی ساده‌ست که بتونن یه‌ضرب همه‌چیزو درست کنن.
+
+با این حال، برای هر چیزی که خیلی ساده نباشه، این مدل‌ها نمی‌تونن زمینه رو با دقت کافی نگه دارن تا به یه راه‌حل درست برسن. تو، به‌عنوان مهندس نرم‌افزار، باید مطمئن بشی که نیازها شفافن و کد واقعاً همون کاری رو می‌کنه که باید بکنه.
+
+---
+
+**منبع اصلی**: https://zed.dev/blog/why-llms-cant-build-softwarev</div>
+    
+                    <div class="article-tags">
+                        <span class="tag">llms</span>
+                    </div>
+                
+    <a href="../index.html" style="display: inline-block; margin-top: 30px; padding: 10px 20px; background: #3498db; color: white; text-decoration: none; border-radius: 5px;">بازگشت به صفحه اصلی</a>
+</body>
+</html>

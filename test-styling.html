@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تست استایل - طاها باختری</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Font Definitions */
+        @font-face {
+            font-family: 'DigiRastinPlus';
+            font-style: normal;
+            font-weight: 300;
+            src: url('Digi-Rastin-Plus/Digi Rastin Plus Rectangle.ttf') format('truetype');
+        }
+
+        @font-face {
+            font-family: 'DigiRastinPlus';
+            font-style: normal;
+            font-weight: 400;
+            src: url('Digi-Rastin-Plus/Digi Rastin Plus Rectangle.ttf') format('truetype');
+        }
+
+        @font-face {
+            font-family: 'DigiRastinPlus';
+            font-style: normal;
+            font-weight: 500;
+            src: url('Digi-Rastin-Plus/Digi Rastin Plus Rectangle.ttf') format('truetype');
+        }
+
+        @font-face {
+            font-family: 'DigiRastinPlus';
+            font-style: normal;
+            font-weight: 700;
+            src: url('Digi-Rastin-Plus/Digi Rastin Plus Rectangle.ttf') format('truetype');
+        }
+        
+        /* RTL Base Styles */
+        html {
+            direction: rtl;
+        }
+        
+        body {
+            font-family: 'DigiRastinPlus', 'Tahoma', 'Segoe UI', Arial, sans-serif;
+            background: #ffffff;
+            color: #333;
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            direction: rtl;
+            text-align: right;
+        }
+
+        * {
+            direction: rtl;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .test-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: #3498db;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        .test-button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+
+        .test-button:hover {
+            background: #2980b9;
+        }
+
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        .article-preview {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            background: white;
+        }
+
+        .article-title {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .article-meta {
+            color: #666;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .article-content {
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin: 5px 5px 5px 0;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>تست استایل مقالات</h1>
+        
+        <div class="info">
+            <strong>هدف:</strong> تست فونت، RTL، و استایل‌های مقالات قبل از ایجاد فایل HTML
+        </div>
+
+        <div class="test-section">
+            <h2>تست فونت و RTL</h2>
+            <p>این متن با فونت DigiRastinPlus نمایش داده می‌شود. اگر فونت بارگیری شده باشد، باید متفاوت از فونت پیش‌فرض نمایش داده شود.</p>
+            <p><strong>متن پررنگ</strong> و <em>متن مورب</em> برای تست وزن‌های مختلف فونت.</p>
+        </div>
+
+        <div class="test-section">
+            <h2>پیش‌نمایش مقاله</h2>
+            <div class="article-preview">
+                <h1 class="article-title">عنوان مقاله نمونه</h1>
+                <div class="article-meta">
+                    <div><i class="fas fa-user"></i> طاها باختری</div>
+                    <div><i class="fas fa-calendar"></i> ۱۴۰۳/۱۰/۱۰</div>
+                </div>
+                <div class="article-content">
+                    <h2>سرتیتر دوم</h2>
+                    <p>این یک پاراگراف نمونه است که نشان می‌دهد متن چگونه نمایش داده می‌شود. این متن باید به درستی از راست به چپ خوانده شود و فونت مناسب داشته باشد.</p>
+                    
+                    <h3>سرتیتر سوم</h3>
+                    <p>پاراگراف دیگری برای تست. شامل <strong>متن پررنگ</strong> و <em>متن مورب</em>.</p>
+                    
+                    <ul>
+                        <li>آیتم اول لیست</li>
+                        <li>آیتم دوم لیست</li>
+                        <li>آیتم سوم لیست</li>
+                    </ul>
+                </div>
+                
+                <div style="margin-top: 20px;">
+                    <span class="tag">تگ۱</span>
+                    <span class="tag">تگ۲</span>
+                    <span class="tag">نمونه</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>اقدامات تست</h2>
+            <button class="test-button" onclick="testFont()">تست فونت</button>
+            <button class="test-button" onclick="generateTestArticle()">ایجاد مقاله تست</button>
+            <button class="test-button" onclick="openSampleArticle()">باز کردن مقاله نمونه</button>
+            <div id="test-results"></div>
+        </div>
+
+        <div style="margin-top: 30px; text-align: center;">
+            <a href="test-article-system.html" class="test-button">سیستم تست کامل</a>
+            <a href="article-list.html" class="test-button">مدیریت مقالات</a>
+            <a href="index.html" class="test-button">صفحه اصلی</a>
+        </div>
+    </div>
+
+    <script src="articles.js"></script>
+    <script>
+        function testFont() {
+            const results = document.getElementById('test-results');
+            const testElement = document.createElement('div');
+            testElement.style.fontFamily = 'DigiRastinPlus, Tahoma, Arial, sans-serif';
+            testElement.textContent = 'تست فونت DigiRastinPlus';
+            
+            // Check if font is loaded
+            const fontLoaded = document.fonts.check('1em DigiRastinPlus');
+            
+            results.innerHTML = `
+                <div class="${fontLoaded ? 'success' : 'info'}">
+                    <strong>وضعیت فونت:</strong> ${fontLoaded ? 'بارگیری شده ✓' : 'در حال بارگیری یا خطا ⚠️'}
+                    <br>
+                    <strong>مسیر فونت:</strong> Digi-Rastin-Plus/Digi Rastin Plus Rectangle.ttf
+                    <div style="margin-top: 10px; font-size: 1.2rem; font-family: 'DigiRastinPlus', Tahoma, Arial, sans-serif;">
+                        نمونه متن با فونت DigiRastinPlus
+                    </div>
+                </div>
+            `;
+        }
+
+        async function generateTestArticle() {
+            const results = document.getElementById('test-results');
+            results.innerHTML = '<div class="info">در حال ایجاد مقاله تست...</div>';
+            
+            try {
+                const testArticle = {
+                    title: 'مقاله تست استایل',
+                    content: `# مقاله تست استایل
+
+این مقاله برای تست استایل‌ها و فونت ایجاد شده است.
+
+## ویژگی‌های تست شده
+
+- **فونت DigiRastinPlus**: باید به درستی نمایش داده شود
+- **راست‌چین (RTL)**: متن باید از راست به چپ باشد  
+- **استایل‌های مختلف**: سرتیترها، لیست‌ها، و غیره
+
+### لیست نمونه
+
+1. آیتم اول
+2. آیتم دوم
+3. آیتم سوم
+
+> این یک نقل قول نمونه است.
+
+**متن پررنگ** و *متن مورب* برای تست.`,
+                    author: 'طاها باختری',
+                    date: new Date().toLocaleDateString('fa-IR'),
+                    tags: ['تست', 'استایل', 'فونت']
+                };
+                
+                const slug = articleManager.createArticle(testArticle);
+                
+                results.innerHTML = `
+                    <div class="success">
+                        <strong>موفق!</strong> مقاله تست با slug "${slug}" ایجاد شد.
+                        <br>فایل HTML به صورت خودکار دانلود شده است.
+                    </div>
+                `;
+                
+            } catch (error) {
+                results.innerHTML = `
+                    <div class="error">
+                        <strong>خطا:</strong> ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        function openSampleArticle() {
+            window.open('articles/sample-article.html', '_blank');
+        }
+
+        // Test font loading on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(testFont, 1000); // Wait a bit for fonts to load
+        });
+    </script>
+</body>
+</html>
