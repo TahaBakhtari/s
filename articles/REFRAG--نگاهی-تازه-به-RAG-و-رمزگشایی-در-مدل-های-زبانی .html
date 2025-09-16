@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REFRAG: نگاهی تازه به RAG و رمزگشایی در مدل‌های زبانی</title>
+    <style>
+        @font-face {
+            font-family: 'IRANYekanX';
+            src: url('./IRANYekanX family/IRANYekanX-Regular.ttf') format('truetype');
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'IRANYekanX';
+            src: url('./IRANYekanX family/IRANYekanX-Bold.ttf') format('truetype');
+            font-weight: 700;
+            font-style: normal;
+            font-display: swap;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'IRANYekanX', 'Tahoma', 'Arial', sans-serif;
+            line-height: 1.8;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            direction: rtl;
+            text-align: right;
+            font-size: 16px;
+        }
+        
+        .article-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #ffffff;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .article-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 3rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .article-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+        
+        .article-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .article-meta {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            direction: rtl;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            display: inline-block;
+            backdrop-filter: blur(10px);
+        }
+        
+        .article-content {
+            font-size: 1.15rem;
+            padding: 3rem;
+            direction: rtl;
+            text-align: right;
+            background: #ffffff;
+        }
+        
+        .article-content h2 {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin: 3rem 0 1.5rem 0;
+            font-weight: 700;
+            direction: rtl;
+            text-align: right;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+        
+        .article-content h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 2px;
+        }
+        
+        .article-content h3 {
+            font-size: 1.5rem;
+            color: #34495e;
+            margin: 2.5rem 0 1rem 0;
+            font-weight: 600;
+            direction: rtl;
+            text-align: right;
+            position: relative;
+        }
+        
+        .article-content h3::before {
+            content: '●';
+            color: #667eea;
+            margin-left: 0.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .article-content p {
+            margin-bottom: 1.8rem;
+            text-align: justify;
+            direction: rtl;
+            line-height: 1.9;
+            color: #2c3e50;
+        }
+        
+        .article-content ul, .article-content ol {
+            margin: 2rem 0;
+            padding-right: 2.5rem;
+            direction: rtl;
+            background: #f8fafc;
+            padding: 1.5rem 2.5rem;
+            border-radius: 12px;
+            border-right: 4px solid #667eea;
+        }
+        
+        .article-content li {
+            margin-bottom: 0.8rem;
+            line-height: 1.7;
+            color: #2c3e50;
+        }
+        
+        .article-content ul li::marker {
+            color: #667eea;
+            font-size: 1.2rem;
+        }
+        
+        .article-content blockquote {
+            border-right: 4px solid #667eea;
+            padding: 2rem;
+            margin: 2.5rem 0;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            font-style: italic;
+            color: #4a5568;
+            border-radius: 12px 0 0 12px;
+            direction: rtl;
+            text-align: right;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        
+        .article-content blockquote::before {
+            content: '"';
+            font-size: 4rem;
+            color: #667eea;
+            position: absolute;
+            top: -0.5rem;
+            right: 1rem;
+            opacity: 0.3;
+            font-family: serif;
+        }
+        
+        .article-images {
+            margin: 2rem 0;
+            padding: 0 3rem;
+        }
+        
+        .article-image {
+            margin: 3rem 0;
+            text-align: center;
+            position: relative;
+        }
+        
+        .article-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .article-image img:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        .article-image figcaption {
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            color: #6c757d;
+            font-style: italic;
+            direction: rtl;
+            text-align: center;
+            background: #f8f9fa;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            border-right: 3px solid #667eea;
+        }
+        
+        .article-footer {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 2.5rem 3rem;
+            text-align: center;
+            color: #6c757d;
+            font-size: 0.95rem;
+            direction: rtl;
+            border-top: 1px solid #dee2e6;
+            position: relative;
+        }
+        
+        .article-footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 2px;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                font-size: 14px;
+            }
+            
+            .article-container {
+                margin: 1rem;
+                border-radius: 16px;
+            }
+            
+            .article-header {
+                padding: 2.5rem 1.5rem;
+            }
+            
+            .article-title {
+                font-size: 2.2rem;
+                line-height: 1.3;
+            }
+            
+            .article-meta {
+                font-size: 1rem;
+                padding: 0.6rem 1.2rem;
+            }
+            
+            .article-content {
+                font-size: 1rem;
+                padding: 2rem 1.5rem;
+            }
+            
+            .article-content h2 {
+                font-size: 1.6rem;
+                margin: 2.5rem 0 1rem 0;
+            }
+            
+            .article-content h3 {
+                font-size: 1.3rem;
+                margin: 2rem 0 0.8rem 0;
+            }
+            
+            .article-content p {
+                line-height: 1.8;
+                margin-bottom: 1.5rem;
+            }
+            
+            .article-content ul, .article-content ol {
+                padding: 1rem 1.5rem;
+                margin: 1.5rem 0;
+            }
+            
+            .article-content blockquote {
+                padding: 1.5rem;
+                margin: 2rem 0;
+            }
+            
+            .article-images {
+                padding: 0 1.5rem;
+            }
+            
+            .article-image {
+                margin: 2rem 0;
+            }
+            
+            .article-image img {
+                border-radius: 12px;
+            }
+            
+            .article-footer {
+                padding: 2rem 1.5rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .article-header {
+                padding: 2rem 1rem;
+            }
+            
+            .article-title {
+                font-size: 1.8rem;
+            }
+            
+            .article-content {
+                padding: 1.5rem 1rem;
+            }
+            
+            .article-content h2 {
+                font-size: 1.4rem;
+            }
+            
+            .article-content h3 {
+                font-size: 1.2rem;
+            }
+            
+            .article-images {
+                padding: 0 1rem;
+            }
+            
+            .article-footer {
+                padding: 1.5rem 1rem;
+            }
+        }
+        
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+                color: black;
+            }
+            
+            .article-container {
+                box-shadow: none;
+                border-radius: 0;
+                margin: 0;
+            }
+            
+            .article-header {
+                background: white;
+                color: black;
+                border-bottom: 2px solid #333;
+            }
+            
+            .article-image img {
+                box-shadow: none;
+            }
+            
+            .article-footer {
+                background: white;
+                border-top: 1px solid #333;
+            }
+        }
+        
+        /* Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+        
+        /* High contrast mode */
+        @media (prefers-contrast: high) {
+            .article-header {
+                background: #000;
+                color: #fff;
+            }
+            
+            .article-content {
+                background: #fff;
+                color: #000;
+            }
+            
+            .article-footer {
+                background: #f0f0f0;
+                color: #000;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="article-container">
+        <header class="article-header">
+            <h1 class="article-title">REFRAG: نگاهی تازه به RAG و رمزگشایی در مدل‌های زبانی</h1>
+            <div class="article-meta">منتشر شده در ۲۵ شهریور ۱۴۰۴</div>
+        </header>
+        
+        <main class="article-content">
+            <div>مدل‌های زبانی بزرگ (LLMها) در سال‌های اخیر قدرت عجیبی در پاسخ به سوال‌ها و تولید متن پیدا کرده‌اند. یکی از روش‌های محبوب برای قوی‌تر کردن آن‌ها «تولید متن مبتنی بر بازیابی» یا RAG است. در این روش، مدل برای جواب دادن به یک سؤال، از منابع خارجی هم کمک می‌گیرد. اما مشکل اصلی اینجاست: وقتی ورودی خیلی طولانی باشد، مثل چندین پاراگراف یا یک سند کامل، مدل‌ها کند می‌شوند، حافظه زیادی مصرف می‌کنند و گاهی مجبور می‌شوند کل متن را پردازش کنند حتی اگر فقط چند جمله‌اش مهم باشد.</div><div><br></div><div>مقاله‌ی <b>REFRAG: Rethinking RAG based Decoding&nbsp; &nbsp;</b>راهکاری معرفی کرده به اسم REFRAG که دقیقاً سراغ همین مشکل رفته است. ایده‌ی آن ساده اما هوشمندانه است: به مدل یاد بدهیم فقط روی بخش‌های مهم ورودی تمرکز کند. نتیجه‌ی این کار سرعت خیلی بالاتر، مصرف حافظه کمتر و خروجی همچنان دقیق خواهد بود.</div><div><br></div><div>برای درک بهتر مسئله، می‌توان آن را با مثال یک کتابدار توضیح داد. تصور کنید کسی از شما سؤال می‌پرسد اما جواب داخل یک کتاب هزارصفحه‌ای است. اگر بخواهید کل کتاب را ورق بزنید، زمان زیادی از دست می‌رود. کاری که REFRAG می‌کند این است که به مدل کمک کند مثل یک کتابدار حرفه‌ای عمل کند؛ سریع بخش‌های مهم را پیدا کند و فقط همان‌ها را بخواند. در دنیای LLMها، این مشکل با نام «تأخیر» یا Latency شناخته می‌شود و به‌خصوص در RAG شدت بیشتری دارد چون متن‌های بازیابی‌شده اغلب طولانی و پر از اطلاعات تکراری هستند. راه‌حل REFRAG کاهش این تأخیر به شکل قابل‌توجه است، به‌ویژه در چیزی به نام «زمان تا اولین توکن» یا TTFT؛ یعنی مدتی که طول می‌کشد تا مدل اولین کلمه‌ی پاسخ خود را تولید کند.</div><div><br></div><div>روش REFRAG بر پایه‌ی سه قدم هوشمند طراحی شده است: فشرده‌سازی، حس کردن و گسترش دادن. در قدم اول یعنی فشرده‌سازی، متن‌های طولانی به بلوک‌های کوچک‌تر تقسیم می‌شوند و از هرکدام یک خلاصه یا همان امبدینگ ساخته می‌شود. درست مثل این است که به جای خواندن کل یک فصل، فقط خلاصه‌ی آن را بخوانی. در قدم دوم، مکانیزم حس کردن وارد عمل می‌شود. این مکانیزم تشخیص می‌دهد کدام بلوک‌ها مهم هستند و باید کامل پردازش شوند و کدام بلوک‌ها می‌توانند به همان شکل خلاصه باقی بمانند. شبیه یک دستیار که فقط صفحات مهم کتاب را برایت باز می‌کند. در نهایت، مرحله‌ی گسترش دادن قرار دارد. اگر مدل تشخیص دهد که یک بلوک خلاصه‌شده برای پاسخ دقیق کافی نیست، آن بلوک دوباره باز می‌شود تا جزئیات کامل در اختیار مدل قرار گیرد.</div><div><br></div><div>این فرایند باعث می‌شود طول ورودی مدل خیلی کمتر شود، حافظه‌ی کمتری مصرف گردد و سرعت پردازش هم به شکل چشمگیری افزایش یابد. علاوه بر این، چون فشرده‌سازی از قبل انجام می‌شود، مدل دیگر نیازی به تکرار محاسبات برای همان بلوک‌ها در دفعات بعدی ندارد. در نتیجه، پیچیدگی مکانیزم توجه که در LLMها نقش اصلی را دارد و معمولاً با طول ورودی به شکل تصاعدی افزایش می‌یابد، کاهش پیدا می‌کند و کارایی سیستم بالاتر می‌رود.</div><div><br></div><div>برای آموزش REFRAG دو مرحله کلیدی وجود دارد. در مرحله‌ی پیش‌آموزش مستمر، مدل یاد می‌گیرد که چگونه اطلاعات را فشرده کند و بعداً آن‌ها را بازسازی کند. این شبیه به حالتی است که به مدل یاد داده شود یک فصل را خلاصه کند و بعداً از روی خلاصه، محتوای فصل را به یاد آورد. در مرحله‌ی یادگیری تقویتی یا RL، مدل تمرین می‌کند که به صورت انتخابی فشرده‌سازی را انجام دهد. یعنی تشخیص دهد کدام قسمت‌های متن مهم هستند و باید به صورت کامل نگهداری شوند و کدام قسمت‌ها قابلیت فشرده شدن دارند. این کار باعث می‌شود REFRAG بسیار هوشمندانه‌تر عمل کند و دقت پاسخ‌ها همچنان حفظ شود.</div><div><br></div><div>محققان برای آزمایش این روش، سناریوهای مختلفی را بررسی کردند؛ از جمله RAG که در آن مدل باید به سوالاتی پاسخ دهد که نیازمند بازیابی اطلاعات از منابع خارجی هستند، مکالمات چندمرحله‌ای که مدل باید اطلاعات مراحل قبلی را به خاطر بسپارد، و خلاصه‌سازی اسناد طولانی که در آن باید یک سند چندصدصفحه‌ای در قالب یک خلاصه‌ی کوتاه ارائه شود. نتایج این آزمایش‌ها بسیار چشمگیر بود. REFRAG توانست زمان TTFT را تا سی برابر بهتر کند، به این معنا که مدل سی برابر سریع‌تر از LLaMA، یکی از مدل‌های پایه‌ی معروف، اولین توکن پاسخ خود را تولید کرد. این سرعت حتی سه و نیم برابر بهتر از روش‌های پیشرفته‌ی قبلی گزارش شد. نکته‌ی مهم دیگر این بود که با وجود چنین افزایش سرعتی، هیچ افتی در کیفیت پاسخ‌ها دیده نشد و دقت کاملاً حفظ شد. همچنین به دلیل استفاده از فشرده‌سازی، REFRAG توانست تا شانزده برابر بیشتر اطلاعات را در پنجره‌ی زمینه یا همان context window جای دهد و این باعث شد مدل بتواند متون بسیار طولانی‌تری را پردازش کند.</div><div><br></div><div>تفاوت REFRAG با روش‌های قبلی هم قابل‌توجه است. بسیاری از روش‌ها برای کاهش تأخیر در LLMها به تغییر معماری یا استفاده از فشرده‌سازی عمومی متکی بودند، اما REFRAG به طور خاص برای کاربردهای RAG طراحی شده است و همین ویژگی باعث شده بتواند از ساختار خاص متن‌های RAG که اغلب پر از تکرار و اطلاعات غیرضروری هستند، بهترین استفاده را بکند. نکته‌ی مهم دیگر استفاده از یادگیری تقویتی برای فشرده‌سازی انتخابی است. به جای فشرده‌سازی کورکورانه، REFRAG هوشمندانه تشخیص می‌دهد کدام بخش‌ها مهم هستند و باید حفظ شوند. علاوه بر این، هیچ تغییری در معماری اصلی مدل‌ها لازم نیست و REFRAG می‌تواند مستقیماً روی مدل‌های موجود مثل LLaMA اجرا شود. انعطاف‌پذیری بالای این روش هم یکی از برتری‌های آن است، چون در هر نقطه‌ای از متن می‌تواند بلوک‌ها را خلاصه یا گسترش دهد و این ویژگی در کاربردهایی مثل مکالمات چندمرحله‌ای ارزش زیادی دارد.</div><div><br></div><div>اهمیت این مقاله در این است که نشان می‌دهد همیشه راه‌حل‌های عمومی برای LLMها کافی نیستند و گاهی لازم است برای کاربردهای خاص، راهکارهای تخصصی‌تری طراحی کنیم. تمرکز این مقاله روی مشکل تأخیر و مصرف حافظه در RAG است و راهکاری ارائه می‌دهد که LLMها را به ابزارهایی سریع‌تر، کارآمدتر و مقیاس‌پذیرتر تبدیل می‌کند.</div><div><br></div><div>برای دانشجویانی که به هوش مصنوعی علاقه‌مند هستند، این مقاله نکات مهمی دارد. پیش از هر چیز، کمک می‌کند بفهمند LLMها با وجود قدرت زیادشان همچنان محدودیت‌های عملی دارند. درک این چالش‌ها برای توسعه‌دهندگان آینده‌ی این حوزه ضروری است. همچنین با خواندن این مقاله با ایده‌هایی مثل فشرده‌سازی انتخابی و استفاده از یادگیری تقویتی در زمینه‌ی LLM آشنا می‌شوند. اگر کسی قصد داشته باشد روی سیستم‌های RAG یا دستیارهای هوشمند کار کند، این مقاله الهام‌بخش خواهد بود، چون نشان می‌دهد چگونه می‌توان با بهینه‌سازی پردازش ورودی، کارایی چنین سیستم‌هایی را بالا برد. نکته‌ی مهم دیگر اینکه مقاله تأکید می‌کند راه‌حل‌های تخصصی‌سازی شده برای یک حوزه‌ی خاص می‌توانند کارآمدتر از روش‌های کلی باشند. در نهایت، این پژوهش به خواننده نشان می‌دهد که مهندسی مدل‌های کارآمد، یعنی مدل‌هایی که هم قدرتمند باشند و هم منابع کمتری مصرف کنند، یکی از مهارت‌های اساسی در توسعه‌ی هوش مصنوعی به حساب می‌آید.</div><div><br></div><div>به طور خلاصه، REFRAG یک گام مهم در جهت ساخت مدل‌های زبانی سریع‌تر، مقیاس‌پذیرتر و کارآمدتر است. این روش نه‌تنها سرعت و دقت را همزمان بهبود می‌دهد، بلکه ظرفیت مدل‌ها را هم به‌طور چشمگیری افزایش می‌دهد. به زبان ساده می‌توان گفت REFRAG به LLMها یاد می‌دهد مثل یک کتابدار باهوش باشند؛ فقط بخش‌های مهم را بخوانند و سریع جواب بدهند.</div><div><br></div>
+        </main>
+        
+        
+        
+        <footer class="article-footer">
+            <p>تولید شده با نویسنده مقاله</p>
+        </footer>
+    </div>
+</body>
+</html>
